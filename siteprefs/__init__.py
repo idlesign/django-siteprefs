@@ -1,0 +1,4 @@
+VERSION = (0, 1, 0)
+
+# TODO Tests wanted.
+# TODO More docs.
