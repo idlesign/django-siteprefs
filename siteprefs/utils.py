@@ -82,6 +82,9 @@ class PrefProxy(object):
             return 1
         return 0
 
+    def __call__(self, *args, **kwargs):
+        return self.get_value()
+
     def __str__(self):
         return '%s = %s' % (self.name, self.get_value())
 
