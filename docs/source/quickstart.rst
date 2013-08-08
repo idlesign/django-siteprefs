@@ -38,7 +38,7 @@ Let's suppose we created ``MYAPP`` application and now create ``settings.py`` fi
         pass
 
 
-From now on you can view (and) edit your preferences with Django Admin interface.
+From now on you can view (and edit) your preferences with Django Admin interface.
 
 Access your settings as usual, all changes made to preferences with Admin interface will be respected::
 
