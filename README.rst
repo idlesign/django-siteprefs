@@ -19,7 +19,7 @@ Let's suppose you have your pretty settings.py file with you application::
 
 Now you want some of those options to be exposed to the Django Admin interface.
 
-Let's say we expose `MY_OPTION_1`, `MY_OPTION_2`, `MY_OPTION_3` options::
+Let's say we expose `MY_OPTION_1`, `MY_OPTION_2`, `MY_OPTION_42` options::
 
     from django.conf import settings
 
