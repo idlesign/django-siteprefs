@@ -25,6 +25,7 @@ Table of Contents
     :maxdepth: 2
 
     quickstart
+    registration
 
 
 Get involved into django-siteprefs
