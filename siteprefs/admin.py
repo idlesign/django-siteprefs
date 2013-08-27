@@ -1,14 +1,17 @@
 from django.contrib import admin
 
-from .models import Preference
+from .settings import EXPOSE_MODEL_TO_ADMIN
 
 
-class PreferenceAdmin(admin.ModelAdmin):
+if EXPOSE_MODEL_TO_ADMIN:
+    from .models import Preference
 
-    list_display = ('app', 'name')
-    search_fields = ['app', 'name']
-    list_filter = ['app']
-    ordering = ['app', 'name']
+    class PreferenceAdmin(admin.ModelAdmin):
+
+        list_display = ('app', 'name')
+        search_fields = ['app', 'name']
+        list_filter = ['app']
+        ordering = ['app', 'name']
 
 
-admin.site.register(Preference, PreferenceAdmin)
+    admin.site.register(Preference, PreferenceAdmin)
