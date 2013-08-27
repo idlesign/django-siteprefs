@@ -78,7 +78,7 @@ def register_admin_models():
         admin.site.register(model_class, get_pref_model_admin_class(prefs_items))
 
 
-def autodiscover():
+def autodiscover_siteprefs():
     """Automatically discovers and registers all preferences available in all apps."""
     import_prefs()
     Preference.read_prefs(get_prefs())

@@ -37,7 +37,7 @@ Let's say we expose `MY_OPTION_1`, `MY_OPTION_2`, `MY_OPTION_42` options::
     # To be sure our app is still functional without django-siteprefs
     # we use this try-except block.
     try:
-        from siteprefs.siteprefs import patch_locals, register_prefs
+        from siteprefs.toolbox import patch_locals, register_prefs
 
         patch_locals()  # This bootstrap is required before `register_prefs` step.
 
@@ -50,11 +50,11 @@ Let's say we expose `MY_OPTION_1`, `MY_OPTION_2`, `MY_OPTION_42` options::
 We're done with the app. Now to your projects' settings.py.
 
 * Add `siteprefs` into `INSTALLED_APPS`;
-* Use siteprefs `autodiscover` function to locate all the options exposed by apps in your project::
+* Use siteprefs `autodiscover_siteprefs` function to locate all the options exposed by apps in your project::
 
-    from siteprefs import siteprefs
+    from siteprefs.toolbox import autodiscover_siteprefs
 
-    siteprefs.autodiscover()
+    autodiscover_siteprefs()
 
 
 Now you can view your settings in Django Admin.

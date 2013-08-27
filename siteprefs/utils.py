@@ -10,7 +10,7 @@ from django.contrib import admin
 from .signals import prefs_save
 
 
-# Module name used by siteprefs.autodiscover() to find preferences in application packages.
+# Module name used by siteprefs.toolbox.autodiscover_siteprefs() to find preferences in application packages.
 PREFS_MODULE_NAME = 'settings'
 
 

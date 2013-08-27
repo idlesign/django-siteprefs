@@ -4,9 +4,9 @@ Getting started
 * Add the **siteprefs** application to INSTALLED_APPS in your settings file (usually 'settings.py').
 * Add preferences ``autodiscover`` function call into settings file::
 
-    from siteprefs import siteprefs
+    from siteprefs.toolbox import autodiscover_siteprefs
 
-    siteprefs.autodiscover()
+    autodiscover_siteprefs()
 
 
 Quick example
@@ -24,7 +24,7 @@ Let's suppose we created ``MYAPP`` application and now create ``settings.py`` fi
 
 
     try:  # Respect those users who doesn't have siteprefs installed.
-        from siteprefs.siteprefs import patch_locals, register_prefs, pref, pref_group
+        from siteprefs.toolbox import patch_locals, register_prefs, pref, pref_group
 
         patch_locals()  # That's bootstrap.
 
@@ -32,6 +32,7 @@ Let's suppose we created ``MYAPP`` application and now create ``settings.py`` fi
             # First we define a group of related settings, and mark them non-static (editable).
             pref_group('Mail settings', (ENABLE_MAIL_RECOVERY, ENABLE_MAIL_BOMBS), static=False),
             SLOGAN,  # This setting stays static non-editable.
+            # And finally we register a non-static setting with extended meta for Admin.
             pref(ENABLE_GRAVATAR_SUPPORT, verbose_name='Enable Gravatar service support', static=False, help_text='This enables Gravatar support.'),
         )
     except ImportError:
