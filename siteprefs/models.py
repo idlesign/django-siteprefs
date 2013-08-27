@@ -11,7 +11,6 @@ class Preference(models.Model):
     name = models.CharField(_('Name'), max_length=150)
     text = models.TextField(_('Value'), null=True, blank=True)
 
-    @staticmethod
     def __str__(self):
         return '%s:%s' % (self.app, self.name)
 
