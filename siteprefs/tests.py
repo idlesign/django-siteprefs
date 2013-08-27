@@ -6,11 +6,19 @@ from django.contrib import admin
 from django.db import models
 
 from .utils import Frame, PatchedLocal, PrefProxy, get_field_for_proxy, get_pref_model_class, get_pref_model_admin_class, get_frame_locals, import_module, PREFS_MODULE_NAME
+from .toolbox import autodiscover_siteprefs
 
 
 class FakeSettingsModule(object):
 
     __name__ = 'siteprefs.settings'
+
+
+class ToolboxTest(unittest.TestCase):
+
+    def test_autodiscover(self):
+        __package__ = 'siteprefs'
+        autodiscover_siteprefs()
 
 
 class UtilsTest(unittest.TestCase):
