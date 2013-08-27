@@ -1,4 +1,1 @@
-VERSION = (0, 1, 0)
-
-# TODO Tests wanted.
-# TODO More docs.
+VERSION = (0, 2, 0)

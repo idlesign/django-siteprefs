@@ -3,8 +3,6 @@ django-siteprefs
 http://github.com/idlesign/django-siteprefs
 
 
-*ALPHA. MIND IT*
-
 .. image:: https://pypip.in/d/django-siteprefs/badge.png
         :target: https://crate.io/packages/django-siteprefs
 
