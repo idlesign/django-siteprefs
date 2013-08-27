@@ -8,10 +8,7 @@ from django.utils.module_loading import module_has_submodule
 from django.contrib import admin
 
 from .signals import prefs_save
-
-
-# Module name used by siteprefs.toolbox.autodiscover_siteprefs() to find preferences in application packages.
-PREFS_MODULE_NAME = 'settings'
+from .settings import PREFS_MODULE_NAME
 
 
 class Frame(object):
@@ -64,6 +61,8 @@ class PrefProxy(object):
         self.verbose_name = verbose_name
         if field is None:
             self.field = get_field_for_proxy(self)
+        else:
+            self.field = field
 
     def get_value(self):
         if self.static:
