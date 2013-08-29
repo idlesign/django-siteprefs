@@ -80,9 +80,14 @@ def register_admin_models():
 
 def autodiscover_siteprefs():
     """Automatically discovers and registers all preferences available in all apps."""
-    import_prefs()
-    Preference.read_prefs(get_prefs())
-    register_admin_models()
+    with Frame(stepback=2) as frame:
+        package = frame.f_globals['__package__']
+
+    # Do not discover anything if called from manage.py (e.g. executing commands from cli).
+    if package != 'django.utils':
+        import_prefs()
+        Preference.read_prefs(get_prefs())
+        register_admin_models()
 
 
 def patch_locals():
