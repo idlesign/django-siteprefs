@@ -1,7 +1,7 @@
 Preferences registration
 ========================
 
-SitePrefs has several helpers to ease application settings registration.
+**siteprefs** has several helpers to ease application settings registration.
 
 All of them reside in `siteprefs.toolbox` module. Let's go one by one:
 
@@ -43,22 +43,22 @@ All of them reside in `siteprefs.toolbox` module. Let's go one by one:
 Options accepted by prefs
 -------------------------
 
-These are the options accepted as **kwargs** by SitePrefs helpers:
+These are the options accepted as **kwargs** by **siteprefs** helpers:
 
 
 * `static`
 
-  Flag to mark a preference editable from Admin. False by default.
+  Flag to mark a preference editable from Admin - static are not editable. True by default.
 
 * `readonly`
 
-  Flag to mark an [editable] preference read only for Admin.
+  Flag to mark an [editable] preference read only for Admin. False by default.
 
 * `field`
 
-  Field instance (from django.db.models, e.g. BooleanField()) to represent sitepref in Admin.
+  Field instance (from django.db.models, e.g. ``BooleanField()``) to represent a sitepref in Admin.
 
-  None by default. If None SitePrefs will try to determine an appropriate field type for a given
+  None by default. If None, **siteprefs** will try to determine an appropriate field type for a given
   preference value type.
 
 * `category`
