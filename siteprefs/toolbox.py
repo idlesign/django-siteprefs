@@ -1,3 +1,5 @@
+import sys
+
 from collections import OrderedDict
 
 from django.contrib import admin
@@ -83,8 +85,9 @@ def autodiscover_siteprefs():
     with Frame(stepback=2) as frame:
         package = frame.f_globals['__package__']
 
+    UTILS_PACKAGE = 'django.utils'
     # Do not discover anything if called from manage.py (e.g. executing commands from cli).
-    if package != 'django.utils':
+    if package != UTILS_PACKAGE or (len(sys.argv) > 1 and sys.argv[1] == 'runserver'):
         import_prefs()
         Preference.read_prefs(get_prefs())
         register_admin_models()

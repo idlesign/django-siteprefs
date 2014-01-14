@@ -1,3 +1,4 @@
+import os
 import inspect
 from collections import OrderedDict
 
@@ -201,8 +202,15 @@ def import_module(package, module_name):
 
 def import_prefs():
     """Imports preferences modules from packages (apps)."""
+    settings_locals = get_frame_locals(3)
 
-    import_module(get_frame_locals(3)['__package__'], PREFS_MODULE_NAME)
+    project_package = settings_locals['__package__']  # Expected project layout introduced in Django 1.4
+    if not project_package:
+        # Fallback to old layout.
+        project_package = os.path.split(os.path.dirname(settings_locals['__file__']))[-1]
+
+    # Try to import project-wide prefs.
+    import_module(project_package, PREFS_MODULE_NAME)
 
     from django.conf import settings
 
