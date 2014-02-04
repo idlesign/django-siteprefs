@@ -8,6 +8,8 @@ from django.utils.importlib import import_module as import_module_
 from django.utils.module_loading import module_has_submodule
 from django.contrib import admin
 
+from datetime import datetime
+
 from .signals import prefs_save
 from .settings import PREFS_MODULE_NAME
 
@@ -101,6 +103,7 @@ def get_field_for_proxy(val_proxy):
         bool: models.BooleanField,
         int:  models.IntegerField,
         float: models.FloatField,
+        datetime: models.DateTimeField,
     }.get(type(val_proxy.default), models.TextField)(**field_kwargs)
     return field
 
