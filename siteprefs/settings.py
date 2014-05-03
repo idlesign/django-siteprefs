@@ -8,5 +8,5 @@ EXPOSE_MODEL_TO_ADMIN = getattr(settings, 'SITEPREFS_EXPOSE_MODEL_TO_ADMIN', Fal
 PREFS_MODULE_NAME = getattr(settings, 'SITEPREFS_MODULE_NAME', 'settings')
 
 # List of commands called by manage.py where autodiscover is enabled
-ENABLED_COMMANDS = getattr(settings, "SITEPREFS_ENABLED_COMMANDS",
+MANAGE_SAFE_COMMANDS = getattr(settings, "SITEPREFS_MANAGE_SAFE_COMMANDS",
                            ['runserver', 'runserver_plus', 'run_gunicorn', 'celeryd'])
