@@ -8,6 +8,7 @@ from .models import Preference
 from .utils import import_prefs, get_frame_locals, traverse_local_prefs, get_pref_model_admin_class, get_pref_model_class, PrefProxy, PatchedLocal, Frame
 from .exceptions import SitePrefsException
 from .signals import prefs_save
+from .settings import ENABLED_COMMANDS
 
 
 __PATCHED_LOCALS_SENTINEL = '__siteprefs_locals_patched'
@@ -87,7 +88,7 @@ def autodiscover_siteprefs():
 
     UTILS_PACKAGE = 'django.utils'
     # Do not discover anything if called from manage.py (e.g. executing commands from cli).
-    if package != UTILS_PACKAGE or (len(sys.argv) > 1 and sys.argv[1] == 'runserver'):
+    if package != UTILS_PACKAGE or (len(sys.argv) > 1 and sys.argv[1] in ENABLED_COMMANDS):
         import_prefs()
         Preference.read_prefs(get_prefs())
         register_admin_models()
