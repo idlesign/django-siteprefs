@@ -80,13 +80,16 @@ class UtilsTest(unittest.TestCase):
     def test_get_pref_model_class(self):
         p1 = PrefProxy('pp1', 10)
         p2 = PrefProxy('pp2', 20)
+        p3 = PrefProxy('pp3', 'admin', field=models.CharField(max_length=10))
 
         my_prefs_func = lambda: 'yes'
 
         sys.modules['siteprefs.settings'] = FakeSettingsModule()
 
-        cl = get_pref_model_class('siteprefs', {'pp1': p1, 'pp2': p2}, my_prefs_func)
+        cl = get_pref_model_class('siteprefs', {'pp1': p1, 'pp2': p2, 'pp3': p3}, my_prefs_func)
+        model = cl()
         self.assertTrue(issubclass(cl, models.Model))
+        self.assertIsInstance(model._meta.fields[3], models.CharField)
 
     def test_get_pref_model_admin_class(self):
 
