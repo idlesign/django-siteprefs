@@ -66,6 +66,7 @@ class PrefProxy(object):
             self.field = get_field_for_proxy(self)
         else:
             self.field = field
+            update_field_from_proxy(self.field, self)
 
     def get_value(self):
         if self.static:
@@ -94,21 +95,23 @@ class PrefProxy(object):
         return '%s = %s' % (self.name, self.get_value())
 
 
-def get_field_for_proxy(val_proxy):
+def get_field_for_proxy(pref_proxy):
     """Returns a field object instance for a given PrefProxy object."""
-    field_kwargs = {
-        'verbose_name': val_proxy.verbose_name,
-        'help_text': val_proxy.help_text,
-        'default': val_proxy.default,
-    }
-
     field = {
         bool: models.BooleanField,
         int:  models.IntegerField,
         float: models.FloatField,
         datetime: models.DateTimeField,
-    }.get(type(val_proxy.default), models.TextField)(**field_kwargs)
+    }.get(type(pref_proxy.default), models.TextField)()
+    update_field_from_proxy(field, pref_proxy)
     return field
+
+
+def update_field_from_proxy(field_obj, pref_proxy):
+    """Updates field object with data from a PrefProxy object."""
+    attr_names = ['verbose_name', 'help_text', 'default']
+    for attr_name in attr_names:
+        setattr(field_obj, attr_name, getattr(pref_proxy, attr_name))
 
 
 def get_pref_model_class(app, prefs, get_prefs_func):
@@ -125,6 +128,7 @@ def get_pref_model_class(app, prefs, get_prefs_func):
     }
 
     for field_name, val_proxy in prefs.items():
+        print('%s -> %s' % (field_name, val_proxy.field.verbose_name))
         model_dict[field_name] = val_proxy.field
 
     model = type('Preferences', (models.Model,), model_dict)

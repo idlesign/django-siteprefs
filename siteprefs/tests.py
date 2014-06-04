@@ -81,15 +81,17 @@ class UtilsTest(unittest.TestCase):
         p1 = PrefProxy('pp1', 10)
         p2 = PrefProxy('pp2', 20)
         p3 = PrefProxy('pp3', 'admin', field=models.CharField(max_length=10))
+        p4 = PrefProxy('pp4', 'another', verbose_name='verbosed', static=False, field=models.CharField(max_length=10))
 
         my_prefs_func = lambda: 'yes'
 
         sys.modules['siteprefs.settings'] = FakeSettingsModule()
 
-        cl = get_pref_model_class('siteprefs', {'pp1': p1, 'pp2': p2, 'pp3': p3}, my_prefs_func)
+        cl = get_pref_model_class('siteprefs', {'pp1': p1, 'pp2': p2, 'pp3': p3, 'pp4': p4}, my_prefs_func)
         model = cl()
         self.assertTrue(issubclass(cl, models.Model))
         self.assertIsInstance(model._meta.fields[3], models.CharField)
+        self.assertEquals(model._meta.fields[4].verbose_name, 'verbosed')
 
     def test_get_pref_model_admin_class(self):
 
