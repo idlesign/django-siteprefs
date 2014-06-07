@@ -40,7 +40,7 @@ Get involved into django-siteprefs
 **Spread the word.** If you have some tips and tricks or any other words in mind that you think might be of interest for the others — publish them.
 
 
-The tip
--------
+Also
+----
 
 Consider more applications on the subject — https://www.djangopackages.com/grids/g/live-setting/

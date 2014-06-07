@@ -1,3 +1,11 @@
+django-siteprefs changelog
+==========================
+
+v0.3.2
+------
+* Fixed some `pref()` arguments disrespected if field object is passed in `field` argument (closes #7)
+
+
 v0.3.1
 ------
 * Fixed admin field render when field type is passed into pref() (see #6).

@@ -2,6 +2,8 @@ django-siteprefs
 ================
 http://github.com/idlesign/django-siteprefs
 
+.. image:: https://badge.fury.io/py/django-siteprefs.png
+    :target: http://badge.fury.io/py/django-siteprefs
 
 .. image:: https://pypip.in/d/django-siteprefs/badge.png
         :target: https://crate.io/packages/django-siteprefs
@@ -21,9 +23,7 @@ Let's suppose you have your pretty settings.py file with you application::
     MY_OPTION_42 = getattr(settings, 'MY_APP_MY_OPTION_42', 42)
 
 
-Now you want some of those options to be exposed to the Django Admin interface.
-
-Let's say we expose `MY_OPTION_1`, `MY_OPTION_2`, `MY_OPTION_42` options::
+Now you want these options to be exposed to Django Admin interface::
 
     from django.conf import settings
 
@@ -45,7 +45,7 @@ Let's say we expose `MY_OPTION_1`, `MY_OPTION_2`, `MY_OPTION_42` options::
     except ImportError:
         pass
 
-We're done with the app. Now to your projects' settings.py.
+We're done with the app. Now to your settings.py of your project.
 
 * Add `siteprefs` into `INSTALLED_APPS`;
 * Use siteprefs `autodiscover_siteprefs` function to locate all the options exposed by apps in your project::
@@ -66,7 +66,3 @@ Documentation
 -------------
 
 http://django-siteprefs.readthedocs.org/
-
-
-.. image:: https://d2weczhvl823v0.cloudfront.net/idlesign/django-siteprefs/trend.png
-        :target: https://bitdeli.com/free
