@@ -128,7 +128,6 @@ def get_pref_model_class(app, prefs, get_prefs_func):
     }
 
     for field_name, val_proxy in prefs.items():
-        print('%s -> %s' % (field_name, val_proxy.field.verbose_name))
         model_dict[field_name] = val_proxy.field
 
     model = type('Preferences', (models.Model,), model_dict)
