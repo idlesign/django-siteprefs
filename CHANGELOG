@@ -1,6 +1,11 @@
 django-siteprefs changelog
 ==========================
 
+v0.3.3
+------
+* Fixed UnicodeEncodeError in siteprefs/utils.py on Py 3 (closes #8)
+
+
 v0.3.2
 ------
 * Fixed some `pref()` arguments disrespected if field object is passed in `field` argument (closes #7)
