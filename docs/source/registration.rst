@@ -25,7 +25,7 @@ All of them reside in `siteprefs.toolbox` module. Let's go one by one:
         register_prefs(
             MY_OPT_1, MY_OPT_2,
             pref_group('My options group 1', (MY_OPT_3, MY_OPT_4), static=False),
-            pref_group('My options group 2', (MY_OPT_5, MY_OPT_6)),
+            pref_group('My options group 2', (MY_OPT_5, pref(MY_OPT_6, verbose_name='My 6'))),
         )
 
 

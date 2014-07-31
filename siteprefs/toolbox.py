@@ -52,6 +52,7 @@ def bind_proxy(vals, category=None, **kwargs):
     for local_name, locals_dict in traverse_local_prefs(3):
         addrs[id(locals_dict[local_name])] = local_name
 
+    proxies = []
     locals_dict = get_frame_locals(3)
     for v in vals:  # Try to preserve fields order.
         id_val = id(v)
@@ -70,6 +71,9 @@ def bind_proxy(vals, category=None, **kwargs):
 
                 # Replace original pref variable with a proxy.
                 locals_dict[local_name] = proxy
+                proxies.append(proxy)
+
+    return proxies
 
 
 def register_admin_models():
@@ -140,6 +144,9 @@ def pref_group(title, prefs, **kwargs):
 
     """
     bind_proxy(prefs, title, **kwargs)
+    for proxy in prefs:  # For preferences already marked by pref().
+        if isinstance(proxy, PrefProxy):
+            proxy.category = title
 
 
 def pref(preference, **kwargs):
@@ -149,4 +156,7 @@ def pref(preference, **kwargs):
     PrefProxy to this preference.
 
     """
-    bind_proxy((preference,), **kwargs)
+    try:
+        return bind_proxy((preference,), **kwargs)[0]
+    except IndexError:
+        return
