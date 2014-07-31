@@ -1,6 +1,11 @@
 django-siteprefs changelog
 ==========================
 
+v0.4.0
+------
++ pref_group() now accepts prefs already marked by pref().
+
+
 v0.3.3
 ------
 * Fixed UnicodeEncodeError in siteprefs/utils.py on Py 3 (closes #8)
