@@ -141,6 +141,7 @@ def get_pref_model_class(app, prefs, get_prefs_func):
         for pref in app_prefs.keys():
             if pref in updated_prefs:
                 app_prefs[pref].db_value = updated_prefs[pref]
+        self.pk = self._prefs_app  # Make Django 1.7 happy.
         prefs_save.send(sender=self, app=self._prefs_app, updated_prefs=updated_prefs)
         return True
 
