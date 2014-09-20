@@ -9,6 +9,18 @@ Getting started
     autodiscover_siteprefs()
 
 
+.. warning::
+
+    Those, who are using South for migrations, add this into settings file:
+
+    .. code-block:: python
+
+        SOUTH_MIGRATION_MODULES = {
+            'siteprefs': 'siteprefs.south_migrations',
+        }
+
+
+
 Quick example
 -------------
 
