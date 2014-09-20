@@ -1,6 +1,13 @@
 django-siteprefs changelog
 ==========================
 
+
+v0.5.0
+------
++ Djagno 1.7 ready.
++ Added Polish loco.
+
+
 v0.4.0
 ------
 + pref_group() now accepts prefs already marked by pref().
