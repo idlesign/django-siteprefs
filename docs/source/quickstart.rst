@@ -12,7 +12,7 @@ Getting started
 
 .. warning::
 
-    Those, who are using South for migrations, add this into settings file:
+    Those, who are using South <1.0 for migrations, add this into settings file:
 
     .. code-block:: python
 
