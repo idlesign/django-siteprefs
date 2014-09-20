@@ -115,7 +115,7 @@ def update_field_from_proxy(field_obj, pref_proxy):
 
 
 def get_pref_model_class(app, prefs, get_prefs_func):
-    """Returns preferences model class dynamically crated for a given app."""
+    """Returns preferences model class dynamically crated for a given app or None on conflict."""
 
     model_dict = {
             '_prefs_app': app,
@@ -130,7 +130,10 @@ def get_pref_model_class(app, prefs, get_prefs_func):
     for field_name, val_proxy in prefs.items():
         model_dict[field_name] = val_proxy.field
 
-    model = type('Preferences', (models.Model,), model_dict)
+    try:  # Make Django 1.7 happy.
+        model = type('Preferences', (models.Model,), model_dict)
+    except RuntimeError:
+        return None
 
     def fake_save_base(self, *args, **kwargs):
         updated_prefs = {f.name: getattr(self, f.name) for f in self._meta.fields if not isinstance(f, models.fields.AutoField)}

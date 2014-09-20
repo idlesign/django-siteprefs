@@ -82,7 +82,8 @@ def register_admin_models():
 
     for app_label, prefs_items in prefs.items():
         model_class = get_pref_model_class(app_label, prefs_items, get_app_prefs)
-        admin.site.register(model_class, get_pref_model_admin_class(prefs_items))
+        if model_class is not None:
+            admin.site.register(model_class, get_pref_model_admin_class(prefs_items))
 
 
 def autodiscover_siteprefs():
