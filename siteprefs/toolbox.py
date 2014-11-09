@@ -76,18 +76,20 @@ def bind_proxy(vals, category=None, **kwargs):
     return proxies
 
 
-def register_admin_models():
+def register_admin_models(admin_site):
     """Registers dynamically created preferences models for Admin interface."""
     prefs = get_prefs()
 
     for app_label, prefs_items in prefs.items():
         model_class = get_pref_model_class(app_label, prefs_items, get_app_prefs)
         if model_class is not None:
-            admin.site.register(model_class, get_pref_model_admin_class(prefs_items))
+            admin_site.register(model_class, get_pref_model_admin_class(prefs_items))
 
 
-def autodiscover_siteprefs():
+def autodiscover_siteprefs(admin_site=None):
     """Automatically discovers and registers all preferences available in all apps."""
+    if admin_site is None:
+        admin_site = admin.site
     with Frame(stepback=2) as frame:
         package = frame.f_globals['__package__']
 
@@ -96,7 +98,7 @@ def autodiscover_siteprefs():
     if package != UTILS_PACKAGE or (len(sys.argv) > 1 and sys.argv[1] in MANAGE_SAFE_COMMANDS):
         import_prefs()
         Preference.read_prefs(get_prefs())
-        register_admin_models()
+        register_admin_models(admin_site)
 
 
 def patch_locals():
