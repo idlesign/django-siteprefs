@@ -1,11 +1,11 @@
 import sys
-
 from collections import OrderedDict
 
 from django.contrib import admin
 
 from .models import Preference
-from .utils import import_prefs, get_frame_locals, traverse_local_prefs, get_pref_model_admin_class, get_pref_model_class, PrefProxy, PatchedLocal, Frame
+from .utils import import_prefs, get_frame_locals, traverse_local_prefs, get_pref_model_admin_class, \
+    get_pref_model_class, PrefProxy, PatchedLocal, Frame
 from .exceptions import SitePrefsException
 from .signals import prefs_save
 from .settings import MANAGE_SAFE_COMMANDS
@@ -41,7 +41,7 @@ def get_app_prefs(app=None):
         with Frame(stepback=1) as frame:
             app = frame.f_globals['__name__'].split('.')[0]
     prefs = get_prefs()
-    if not app in prefs:
+    if app not in prefs:
         return None
     return prefs[app]
 

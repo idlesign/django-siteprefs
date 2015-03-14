@@ -11,13 +11,21 @@ class Preference(models.Model):
     name = models.CharField(_('Name'), max_length=150)
     text = models.TextField(_('Value'), null=True, blank=True)
 
+    class Meta(object):
+        verbose_name = _('Preference')
+        verbose_name_plural = _('Preferences')
+        unique_together = ('app', 'name')
+
     def __str__(self):
         return '%s:%s' % (self.app, self.name)
 
     @classmethod
     def read_prefs(cls, mem_prefs):
         """Initializes preferences entries in DB according to currently discovered prefs."""
-        db_prefs = {'%s__%s' % (pref['app'], pref['name']): pref for pref in cls.objects.values().order_by('app', 'name')}
+        db_prefs = {
+            '%s__%s' % (pref['app'], pref['name']): pref for pref in
+            cls.objects.values().order_by('app', 'name')
+        }
 
         new_prefs = []
         for app, prefs in mem_prefs.items():
@@ -44,8 +52,3 @@ class Preference(models.Model):
             if db_pref.name in updated_prefs:
                 db_pref.text = updated_prefs[db_pref.name]
                 db_pref.save()
-
-    class Meta:
-        verbose_name = _('Preference')
-        verbose_name_plural = _('Preferences')
-        unique_together = ('app', 'name')

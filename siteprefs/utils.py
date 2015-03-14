@@ -1,5 +1,6 @@
 import os
 import inspect
+from datetime import datetime
 from collections import OrderedDict
 
 from django.db import models
@@ -7,8 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.importlib import import_module as import_module_
 from django.utils.module_loading import module_has_submodule
 from django.contrib import admin
-
-from datetime import datetime
 
 from .signals import prefs_save
 from .settings import PREFS_MODULE_NAME
@@ -50,7 +49,8 @@ class PatchedLocal(object):
 class PrefProxy(object):
     """Objects of this class replace app preferences."""
 
-    def __init__(self, name, default, category=None, field=None, verbose_name=None, help_text='', static=True, readonly=False):
+    def __init__(self, name, default, category=None, field=None, verbose_name=None, help_text='', static=True,
+                 readonly=False):
         self.name = name
         self.category = category
         self.default = default
@@ -136,7 +136,9 @@ def get_pref_model_class(app, prefs, get_prefs_func):
         return None
 
     def fake_save_base(self, *args, **kwargs):
-        updated_prefs = {f.name: getattr(self, f.name) for f in self._meta.fields if not isinstance(f, models.fields.AutoField)}
+        updated_prefs = {
+            f.name: getattr(self, f.name) for f in self._meta.fields if not isinstance(f, models.fields.AutoField)
+        }
         app_prefs = self._get_prefs(self._prefs_app)
         for pref in app_prefs.keys():
             if pref in updated_prefs:
@@ -180,7 +182,14 @@ def get_pref_model_admin_class(prefs):
 
     model = type('PreferencesAdmin', (admin.ModelAdmin,), cl_model_admin_dict)
     model.changelist_view = lambda self, request, **kwargs: self.change_view(request, '', **kwargs)
-    model.get_object = lambda self, *args: self.model(**{field_name: val_proxy.get_value() for field_name, val_proxy in self.model._get_prefs(self.model._prefs_app).items()})
+    model.get_object = lambda self, *args: (
+        self.model(
+            **{
+                field_name: val_proxy.get_value() for field_name, val_proxy in
+                self.model._get_prefs(self.model._prefs_app).items()
+            }
+        )
+    )
 
     return model
 

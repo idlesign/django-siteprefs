@@ -1,0 +1,3 @@
+[run]
+include = siteprefs/*
+omit = siteprefs/migrations/*, siteprefs/south_migrations/*, siteprefs/runtests.py, siteprefs/tests.py, siteprefs/admin.py, siteprefs/config.py
