@@ -28,7 +28,7 @@ class Frame(object):
 
     def __enter__(self):
         frame = inspect.currentframe().f_back
-        for step in range(self.depth):
+        for __ in range(self.depth):
             frame = frame.f_back
         self.frame = frame
         return self.frame

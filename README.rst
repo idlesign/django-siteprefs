@@ -8,6 +8,15 @@ http://github.com/idlesign/django-siteprefs
 .. image:: https://pypip.in/d/django-siteprefs/badge.png
         :target: https://crate.io/packages/django-siteprefs
 
+.. image:: https://coveralls.io/repos/idlesign/django-siteprefs/badge.png
+    :target: https://coveralls.io/r/idlesign/django-siteprefs
+
+.. image:: https://travis-ci.org/idlesign/django-siteprefs.svg?branch=master
+    :target: https://travis-ci.org/idlesign/django-siteprefs
+
+.. image:: https://landscape.io/github/idlesign/django-siteprefs/master/landscape.svg?style=plastic
+   :target: https://landscape.io/github/idlesign/django-siteprefs/master
+
 
 What's that
 -----------
