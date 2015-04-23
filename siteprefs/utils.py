@@ -94,6 +94,9 @@ class PrefProxy(object):
     def __repr__(self):
         return '%s = %s' % (self.name, self.get_value())
 
+    def __int__(self):
+        return int(self.get_value())
+
 
 def get_field_for_proxy(pref_proxy):
     """Returns a field object instance for a given PrefProxy object."""
