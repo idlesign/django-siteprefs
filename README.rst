@@ -2,21 +2,23 @@ django-siteprefs
 ================
 http://github.com/idlesign/django-siteprefs
 
-.. image:: https://badge.fury.io/py/django-siteprefs.png
-    :target: http://badge.fury.io/py/django-siteprefs
+.. image:: https://img.shields.io/pypi/v/django-siteprefs.svg
+    :target: https://pypi.python.org/pypi/django-siteprefs
 
-.. image:: https://pypip.in/d/django-siteprefs/badge.png
-        :target: https://crate.io/packages/django-siteprefs
+.. image:: https://img.shields.io/pypi/dm/django-siteprefs.svg
+    :target: https://pypi.python.org/pypi/django-siteprefs
 
-.. image:: https://coveralls.io/repos/idlesign/django-siteprefs/badge.png
+.. image:: https://img.shields.io/pypi/l/django-siteprefs.svg
+    :target: https://pypi.python.org/pypi/django-siteprefs
+
+.. image:: https://img.shields.io/coveralls/idlesign/django-siteprefs/master.svg
     :target: https://coveralls.io/r/idlesign/django-siteprefs
 
-.. image:: https://travis-ci.org/idlesign/django-siteprefs.svg?branch=master
+.. image:: https://img.shields.io/travis/idlesign/django-siteprefs/master.svg
     :target: https://travis-ci.org/idlesign/django-siteprefs
 
-.. image:: https://landscape.io/github/idlesign/django-siteprefs/master/landscape.svg?style=plastic
-   :target: https://landscape.io/github/idlesign/django-siteprefs/master
-
+.. image:: https://img.shields.io/codeclimate/github/idlesign/django-siteprefs.svg
+   :target: https://codeclimate.com/github/idlesign/django-siteprefs
 
 What's that
 -----------
