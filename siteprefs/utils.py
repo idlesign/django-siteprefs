@@ -237,4 +237,7 @@ def import_prefs():
     from django.conf import settings
 
     for app in settings.INSTALLED_APPS:
-        import_module(app, PREFS_MODULE_NAME)
+        try:
+            import_module(app, PREFS_MODULE_NAME)
+        except ImportError:
+            pass
