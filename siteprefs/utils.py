@@ -5,7 +5,13 @@ from collections import OrderedDict
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.utils.importlib import import_module as import_module_
+
+try:
+    from django.utils.module_loading import import_module as import_module_
+except ImportError:
+    # Django <=1.9.0
+    from django.utils.importlib import import_module as import_module_
+
 from django.utils.module_loading import module_has_submodule
 from django.contrib import admin
 

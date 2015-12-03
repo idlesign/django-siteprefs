@@ -1,11 +1,12 @@
 """This file contains tests for siteprefs."""
 import sys
+import unittest
 
-from django.utils import unittest
 from django.contrib import admin
 from django.db import models
 
-from .utils import Frame, PatchedLocal, PrefProxy, get_field_for_proxy, get_pref_model_class, get_pref_model_admin_class, get_frame_locals, import_module, PREFS_MODULE_NAME
+from .utils import Frame, PatchedLocal, PrefProxy, get_field_for_proxy, get_pref_model_class, \
+    get_pref_model_admin_class, get_frame_locals, import_module, PREFS_MODULE_NAME
 from .toolbox import autodiscover_siteprefs
 
 
