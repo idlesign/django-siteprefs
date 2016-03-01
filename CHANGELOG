@@ -2,6 +2,11 @@ django-siteprefs changelog
 ==========================
 
 
+v0.5.2
+------
+* Fixed `manage` commands fail due to `autodiscover_siteprefs()` on Django 1.9.
+
+
 v0.5.1
 ------
 * Django 1.9 compatibility improvements.

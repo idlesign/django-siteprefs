@@ -3,7 +3,7 @@ Getting started
 
 * Add the **siteprefs** application to INSTALLED_APPS in your settings file (usually 'settings.py').
 * Use ``> python manage.py syncdb`` command to install apps tables int DB (``> python manage.py migrate`` for Django 1.7+)
-* Add preferences ``autodiscover`` function call into settings (or maybe urls) file::
+* Add preferences ``autodiscover`` function call into settings (or urls; or `.ready()` in some application config on Django 1.9+) file::
 
     from siteprefs.toolbox import autodiscover_siteprefs
 
