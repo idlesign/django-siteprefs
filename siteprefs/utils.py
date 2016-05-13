@@ -12,8 +12,8 @@ except ImportError:
     # Django <=1.9.0
     from django.utils.importlib import import_module as import_module_
 
-from django.utils.module_loading import module_has_submodule
 from django.contrib import admin
+from etc.toolbox import import_app_module, import_project_modules
 
 from .signals import prefs_save
 from .settings import PREFS_MODULE_NAME
@@ -220,12 +220,7 @@ def traverse_local_prefs(stepback=0):
 
 def import_module(package, module_name):
     """Imports a module from a given package."""
-    module = import_module_(package)
-    try:
-        import_module_('%s.%s' % (package, module_name))
-    except:
-        if module_has_submodule(module, module_name):
-            raise
+    import_app_module(package, module_name)
 
 
 def import_prefs():
@@ -240,7 +235,4 @@ def import_prefs():
     # Try to import project-wide prefs.
     import_module(project_package, PREFS_MODULE_NAME)
 
-    from django.conf import settings
-
-    for app in settings.INSTALLED_APPS:
-        import_module(app, PREFS_MODULE_NAME)
+    import_project_modules(PREFS_MODULE_NAME)

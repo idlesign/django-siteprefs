@@ -2,6 +2,11 @@ django-siteprefs changelog
 ==========================
 
 
+Unreleased
+----------
+* IMPORTANT: added dependency - django-etc.
+
+
 v0.5.2
 ------
 * Fixed `manage` commands fail due to `autodiscover_siteprefs()` on Django 1.9.
