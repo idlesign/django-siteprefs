@@ -16,7 +16,7 @@ v0.6.0
 
 v0.5.3
 ------
-* 0.5.3 is PyPI alias for 0.5.2.
+* IMPORTANT: added dependency - django-etc (fixed #13).
 
 
 v0.5.2
