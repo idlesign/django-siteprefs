@@ -22,7 +22,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
 
-    install_requires=['django-etc'],
+    install_requires=['django-etc >= 0.9.1'],
 
     classifiers=[
         'Development Status :: 4 - Beta',
