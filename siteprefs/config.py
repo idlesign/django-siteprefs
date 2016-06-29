@@ -7,3 +7,7 @@ class SiteprefsConfig(AppConfig):
 
     name = 'siteprefs'
     verbose_name = _('Site Preferences')
+
+    def ready(self):
+        from .toolbox import autodiscover_siteprefs
+        autodiscover_siteprefs()
