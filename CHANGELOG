@@ -2,9 +2,16 @@ django-siteprefs changelog
 ==========================
 
 
-Unreleased
-----------
+v0.6.0
+------
 * IMPORTANT: added dependency - django-etc.
+* IMPORTANT: manual autodiscover_siteprefs() call is not required after Django 1.7.
+* Fixed KeyError in import_prefs (see #10)
+
+
+v0.5.3
+------
+* 0.5.3 is PyPI alias for 0.5.2.
 
 
 v0.5.2
