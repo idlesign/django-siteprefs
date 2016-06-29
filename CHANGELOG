@@ -2,6 +2,11 @@ django-siteprefs changelog
 ==========================
 
 
+v0.6.1
+------
+* import_prefs() regression fix.
+
+
 v0.6.0
 ------
 * IMPORTANT: added dependency - django-etc.

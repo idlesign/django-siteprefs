@@ -90,15 +90,9 @@ def autodiscover_siteprefs(admin_site=None):
     """Automatically discovers and registers all preferences available in all apps."""
     if admin_site is None:
         admin_site = admin.site
-    with Frame(stepback=2) as frame:
-        package = frame.f_globals['__package__']
 
-    skip_packages = [
-        'django.utils',
-        'importlib',  # Since Django 1.9
-    ]
     # Do not discover anything if called from manage.py (e.g. executing commands from cli).
-    if package not in skip_packages or (len(sys.argv) > 1 and sys.argv[1] in MANAGE_SAFE_COMMANDS):
+    if ('manage' in sys.argv[0] and sys.argv[1] in MANAGE_SAFE_COMMANDS) or 'manage' not in sys.argv[0]:
         import_prefs()
         Preference.read_prefs(get_prefs())
         register_admin_models(admin_site)
