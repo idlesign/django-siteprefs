@@ -36,7 +36,7 @@ Let's suppose we created ``MYAPP`` application and now create ``settings.py`` fi
     PRIVATE_SETTING = 'Hidden'
 
 
-    try:  # Respect those users who doesn't have siteprefs installed.
+    if 'siteprefs' in settings.INSTALLED_APPS:  # Respect those users who doesn't have siteprefs installed.
         from siteprefs.toolbox import patch_locals, register_prefs, pref, pref_group
 
         patch_locals()  # That's bootstrap.
@@ -48,8 +48,6 @@ Let's suppose we created ``MYAPP`` application and now create ``settings.py`` fi
             # And finally we register a non-static setting with extended meta for Admin.
             pref(ENABLE_GRAVATAR_SUPPORT, verbose_name='Enable Gravatar service support', static=False, help_text='This enables Gravatar support.'),
         )
-    except ImportError:
-        pass
 
 
 From now on you can view (and edit) your preferences with Django Admin interface.
