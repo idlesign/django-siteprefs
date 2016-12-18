@@ -7,6 +7,11 @@ v0.6.3
 * Package distribution fix
 
 
+v0.6.2
+------
+* Dummy. Never released.
+
+
 v0.6.1
 ------
 * import_prefs() regression fix.
