@@ -28,7 +28,8 @@ What's that
 
 Let's suppose you have your pretty settings.py file with you application:
 
-.. code-block:: python
+.. code:: python
+
     from django.conf import settings
 
     MY_OPTION_1 = getattr(settings, 'MY_APP_MY_OPTION_1', True)
@@ -38,7 +39,8 @@ Let's suppose you have your pretty settings.py file with you application:
 
 Now you want these options to be exposed to Django Admin interface:
 
-.. code-block:: python
+.. code:: python
+
     from django.conf import settings
 
     MY_OPTION_1 = getattr(settings, 'MY_APP_MY_OPTION_1', True)
@@ -61,6 +63,7 @@ We're done with the app. Now to your settings.py of your project.
 * Add `siteprefs` into `INSTALLED_APPS`;
 * Use siteprefs `autodiscover_siteprefs` function to locate all the options exposed by apps in your project:
   .. code-block:: python
+
       from siteprefs.toolbox import autodiscover_siteprefs
       
       autodiscover_siteprefs()
