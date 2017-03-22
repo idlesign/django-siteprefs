@@ -26,8 +26,9 @@ What's that
 
 *django-siteprefs allows Django applications settings to come alive*
 
-Let's suppose you have your pretty settings.py file with you application::
+Let's suppose you have your pretty settings.py file with you application:
 
+.. code-block:: python
     from django.conf import settings
 
     MY_OPTION_1 = getattr(settings, 'MY_APP_MY_OPTION_1', True)
@@ -35,8 +36,9 @@ Let's suppose you have your pretty settings.py file with you application::
     MY_OPTION_42 = getattr(settings, 'MY_APP_MY_OPTION_42', 42)
 
 
-Now you want these options to be exposed to Django Admin interface::
+Now you want these options to be exposed to Django Admin interface:
 
+.. code-block:: python
     from django.conf import settings
 
     MY_OPTION_1 = getattr(settings, 'MY_APP_MY_OPTION_1', True)
@@ -46,7 +48,7 @@ Now you want these options to be exposed to Django Admin interface::
 
     # To be sure our app is still functional without django-siteprefs
     # we use this try-except block.
-    try:
+    if 'siteprefs' in settings.INSTALLED_APPS:
         from siteprefs.toolbox import patch_locals, register_prefs
 
         patch_locals()  # This bootstrap is required before `register_prefs` step.
@@ -54,17 +56,14 @@ Now you want these options to be exposed to Django Admin interface::
         # And that's how we expose our options to Admin.
         register_prefs(MY_OPTION_1, MY_OPTION_2, MY_OPTION_42)
 
-    except ImportError:
-        pass
-
 We're done with the app. Now to your settings.py of your project.
 
 * Add `siteprefs` into `INSTALLED_APPS`;
-* Use siteprefs `autodiscover_siteprefs` function to locate all the options exposed by apps in your project::
-
-    from siteprefs.toolbox import autodiscover_siteprefs
-
-    autodiscover_siteprefs()
+* Use siteprefs `autodiscover_siteprefs` function to locate all the options exposed by apps in your project:
+  .. code-block:: python
+      from siteprefs.toolbox import autodiscover_siteprefs
+      
+      autodiscover_siteprefs()
 
 
 Now you can view your settings in Django Admin.
