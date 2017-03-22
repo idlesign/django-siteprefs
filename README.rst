@@ -33,20 +33,13 @@ Let's suppose you have your pretty settings.py file with you application:
     from django.conf import settings
 
     MY_OPTION_1 = getattr(settings, 'MY_APP_MY_OPTION_1', True)
-    MY_OPTION_2 = getattr(settings, 'MY_APP_MY_OPTION_2', 'No alien utopia // Will long survive our bravery')
+    MY_OPTION_2 = getattr(settings, 'MY_APP_MY_OPTION_2', 'Some value')
     MY_OPTION_42 = getattr(settings, 'MY_APP_MY_OPTION_42', 42)
 
 
-Now you want these options to be exposed to Django Admin interface:
+Now you want these options to be exposed to Django Admin interface. Just add the following:
 
 .. code:: python
-
-    from django.conf import settings
-
-    MY_OPTION_1 = getattr(settings, 'MY_APP_MY_OPTION_1', True)
-    MY_OPTION_2 = getattr(settings, 'MY_APP_MY_OPTION_2', 'No alien utopia // Will long survive our bravery')
-    MY_OPTION_42 = getattr(settings, 'MY_APP_MY_OPTION_42', 42)
-
 
     # To be sure our app is still functional without django-siteprefs.
     if 'siteprefs' in settings.INSTALLED_APPS:
