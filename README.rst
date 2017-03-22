@@ -62,7 +62,8 @@ We're done with the app. Now to your settings.py of your project.
 
 * Add `siteprefs` into `INSTALLED_APPS`;
 * Use siteprefs `autodiscover_siteprefs` function to locate all the options exposed by apps in your project:
-  .. code-block:: python
+  
+  .. code:: python
 
       from siteprefs.toolbox import autodiscover_siteprefs
       
