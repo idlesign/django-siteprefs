@@ -48,8 +48,7 @@ Now you want these options to be exposed to Django Admin interface:
     MY_OPTION_42 = getattr(settings, 'MY_APP_MY_OPTION_42', 42)
 
 
-    # To be sure our app is still functional without django-siteprefs
-    # we use this try-except block.
+    # To be sure our app is still functional without django-siteprefs.
     if 'siteprefs' in settings.INSTALLED_APPS:
         from siteprefs.toolbox import patch_locals, register_prefs
 
