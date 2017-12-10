@@ -47,19 +47,8 @@ Now you want these options to be exposed to Django Admin interface. Just add the
         # And that's how we expose our options to Admin.
         register_prefs(MY_OPTION_1, MY_OPTION_2, MY_OPTION_42)
 
-We're done with the app. Now to settings.py of your project.
 
-* Add `siteprefs` into `INSTALLED_APPS`;
-* Use siteprefs `autodiscover_siteprefs` function to locate all the options exposed by apps in your project:
-  
-  .. code:: python
-
-      from siteprefs.toolbox import autodiscover_siteprefs
-      
-      autodiscover_siteprefs()
-
-
-Now you can view your settings in Django Admin.
+After that you can view your settings in Django Admin.
 
 If you want those settings to be editable through the Admin - `siteprefs` allows that too, and even more.
 
