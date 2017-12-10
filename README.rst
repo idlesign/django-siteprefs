@@ -5,9 +5,6 @@ http://github.com/idlesign/django-siteprefs
 .. image:: https://img.shields.io/pypi/v/django-siteprefs.svg
     :target: https://pypi.python.org/pypi/django-siteprefs
 
-.. image:: https://img.shields.io/pypi/dm/django-siteprefs.svg
-    :target: https://pypi.python.org/pypi/django-siteprefs
-
 .. image:: https://img.shields.io/pypi/l/django-siteprefs.svg
     :target: https://pypi.python.org/pypi/django-siteprefs
 
