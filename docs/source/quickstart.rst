@@ -2,24 +2,7 @@ Getting started
 ===============
 
 * Add the **siteprefs** application to INSTALLED_APPS in your settings file (usually 'settings.py').
-* Use ``> python manage.py migrate`` command to install apps tables int DB (``> python manage.py syncdb`` for Django <1.7)
-* For Django <1.7 add preferences ``autodiscover`` function call into urls.py file::
-
-    from siteprefs.toolbox import autodiscover_siteprefs
-
-    autodiscover_siteprefs()
-
-
-.. warning::
-
-    Those, who are using South <1.0 for migrations, add this into settings file:
-
-    .. code-block:: python
-
-        SOUTH_MIGRATION_MODULES = {
-            'siteprefs': 'siteprefs.south_migrations',
-        }
-
+* Use ``> python manage.py migrate`` command to install apps tables int DB.
 
 
 Quick example
