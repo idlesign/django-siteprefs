@@ -29,7 +29,7 @@ Let's suppose we created ``MYAPP`` application and now create ``settings.py`` fi
             pref_group('Mail settings', (ENABLE_MAIL_RECOVERY, ENABLE_MAIL_BOMBS), static=False),
             SLOGAN,  # This setting stays static non-editable.
             # And finally we register a non-static setting with extended meta for Admin.
-            pref(ENABLE_GRAVATAR_SUPPORT, verbose_name='Enable Gravatar service support', static=False, help_text='This enables Gravatar support.'),
+            pref(ENABLE_GRAVATARS, verbose_name='Enable Gravatar service support', static=False, help_text='This enables Gravatar support.'),
         )
 
 
