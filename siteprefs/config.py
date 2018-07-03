@@ -1,7 +1,7 @@
-import sys
-
 from django.apps import AppConfig
 from django.utils.translation import ugettext_lazy as _
+
+from .settings import DISABLE_AUTODISCOVER
 
 
 class SiteprefsConfig(AppConfig):
@@ -12,9 +12,7 @@ class SiteprefsConfig(AppConfig):
 
     def ready(self):
 
-        # Shouldn't try to autodiscover in test as
-        # DB probably won't be initialized in the moment.
-        if 'test' in sys.argv[0]:
+        if DISABLE_AUTODISCOVER:
             return
 
         from .toolbox import autodiscover_siteprefs

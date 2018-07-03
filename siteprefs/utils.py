@@ -1,13 +1,14 @@
-import os
 import inspect
-from datetime import datetime
+import os
 from collections import OrderedDict
+from datetime import datetime
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 try:
     from django.utils.module_loading import import_module as import_module_
+
 except ImportError:
     # Django <=1.9.0
     from django.utils.importlib import import_module as import_module_
@@ -34,9 +35,12 @@ class Frame(object):
 
     def __enter__(self):
         frame = inspect.currentframe().f_back
+
         for __ in range(self.depth):
             frame = frame.f_back
+
         self.frame = frame
+
         return self.frame
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -55,40 +59,73 @@ class PatchedLocal(object):
 class PrefProxy(object):
     """Objects of this class replace app preferences."""
 
-    def __init__(self, name, default, category=None, field=None, verbose_name=None, help_text='', static=True,
-                 readonly=False):
+    def __init__(
+            self, name, default, category=None, field=None, verbose_name=None, help_text='', static=True,
+            readonly=False):
+        """
+
+        :param str|unicode name: Preference name.
+
+        :param default: Default (initial) value.
+
+        :param str|unicode category: Category name the preference belongs to.
+
+        :param Field field: Django model field to represent this preference.
+
+        :param str|unicode verbose_name: Field verbose name.
+
+        :param str|unicode help_text: Field help text.
+
+        :param bool static: Leave this preference static (do not store in DB).
+
+        :param bool readonly: Make this field read only.
+
+        """
         self.name = name
         self.category = category
         self.default = default
         self.static = static
         self.help_text = help_text
+
         if static:
             readonly = True
+
         self.readonly = readonly
+
         if verbose_name is None:
             verbose_name = name.replace('_', ' ').capitalize()
+
         self.verbose_name = verbose_name
+
         if field is None:
             self.field = get_field_for_proxy(self)
+
         else:
             self.field = field
             update_field_from_proxy(self.field, self)
 
     def get_value(self):
+
         if self.static:
             val = self.default
+
         else:
             try:
                 val = getattr(self, 'db_value')
+
             except AttributeError:
                 val = self.default
+
         return self.field.to_python(val)
 
     def __cmp__(self, other):
+
         if self.get_value() < other:
             return -1
+
         elif self.get_value() > other:
             return 1
+
         return 0
 
     def __call__(self, *args, **kwargs):
@@ -102,20 +139,36 @@ class PrefProxy(object):
 
 
 def get_field_for_proxy(pref_proxy):
-    """Returns a field object instance for a given PrefProxy object."""
+    """Returns a field object instance for a given PrefProxy object.
+
+    :param PrefProxy pref_proxy:
+
+    :rtype: models.Field
+
+    """
     field = {
         bool: models.BooleanField,
         int:  models.IntegerField,
         float: models.FloatField,
         datetime: models.DateTimeField,
+
     }.get(type(pref_proxy.default), models.TextField)()
+
     update_field_from_proxy(field, pref_proxy)
+
     return field
 
 
 def update_field_from_proxy(field_obj, pref_proxy):
-    """Updates field object with data from a PrefProxy object."""
-    attr_names = ['verbose_name', 'help_text', 'default']
+    """Updates field object with data from a PrefProxy object.
+
+    :param models.Field field_obj:
+
+    :param PrefProxy pref_proxy:
+
+    """
+    attr_names = ('verbose_name', 'help_text', 'default')
+
     for attr_name in attr_names:
         setattr(field_obj, attr_name, getattr(pref_proxy, attr_name))
 
@@ -123,34 +176,40 @@ def update_field_from_proxy(field_obj, pref_proxy):
 def get_pref_model_class(app, prefs, get_prefs_func):
     """Returns preferences model class dynamically crated for a given app or None on conflict."""
 
+    module = '%s.%s' % (app, PREFS_MODULE_NAME)
+
     model_dict = {
             '_prefs_app': app,
             '_get_prefs': staticmethod(get_prefs_func),
-            '__module__': '%s.%s' % (app, PREFS_MODULE_NAME),
+            '__module__': module,
             'Meta': type('Meta', (models.options.Options,), {
                 'verbose_name': _('Preference'),
-                'verbose_name_plural': _('Preferences')
+                'verbose_name_plural': _('Preferences'),
+                'app_label': app,
+                'managed': False,
             })
     }
 
     for field_name, val_proxy in prefs.items():
         model_dict[field_name] = val_proxy.field
 
-    try:  # Make Django 1.7 happy.
-        model = type('Preferences', (models.Model,), model_dict)
-    except RuntimeError:
-        return None
+    model = type('Preferences', (models.Model,), model_dict)
 
     def fake_save_base(self, *args, **kwargs):
+
         updated_prefs = {
             f.name: getattr(self, f.name) for f in self._meta.fields if not isinstance(f, models.fields.AutoField)
         }
+
         app_prefs = self._get_prefs(self._prefs_app)
+
         for pref in app_prefs.keys():
             if pref in updated_prefs:
                 app_prefs[pref].db_value = updated_prefs[pref]
+
         self.pk = self._prefs_app  # Make Django 1.7 happy.
         prefs_save.send(sender=self, app=self._prefs_app, updated_prefs=updated_prefs)
+
         return True
 
     model.save_base = fake_save_base
@@ -159,6 +218,7 @@ def get_pref_model_class(app, prefs, get_prefs_func):
 
 
 def get_pref_model_admin_class(prefs):
+
     by_category = OrderedDict()
     readonly_fields = []
 
@@ -181,13 +241,17 @@ def get_pref_model_admin_class(prefs):
         cl_model_admin_dict['readonly_fields'] = readonly_fields
 
     fieldsets = []
+
     for category, cat_prefs in by_category.items():
         fieldsets.append((category, {'fields': cat_prefs}))
+
     if fieldsets:
         cl_model_admin_dict['fieldsets'] = fieldsets
 
     model = type('PreferencesAdmin', (admin.ModelAdmin,), cl_model_admin_dict)
+
     model.changelist_view = lambda self, request, **kwargs: self.change_view(request, '', **kwargs)
+
     model.get_object = lambda self, *args: (
         self.model(
             **{
@@ -201,15 +265,26 @@ def get_pref_model_admin_class(prefs):
 
 
 def get_frame_locals(stepback=0):
-    """Returns locals dictionary from a given frame."""
+    """Returns locals dictionary from a given frame.
+
+    :param int stepback:
+
+    :rtype: dict
+
+    """
     with Frame(stepback=stepback) as frame:
         locals_dict = frame.f_locals
+
     return locals_dict
 
 
 def traverse_local_prefs(stepback=0):
     """Generator to walk through variables considered as preferences
     in locals dict of a given frame.
+
+    :param int stepback:
+
+    :rtype: tuple
 
     """
     locals_dict = get_frame_locals(stepback+1)
@@ -219,12 +294,17 @@ def traverse_local_prefs(stepback=0):
 
 
 def import_module(package, module_name):
-    """Imports a module from a given package."""
+    """Imports a module from a given package.
+
+    :param str|unicode package:
+    :param str|unicode module_name:
+
+    """
     import_app_module(package, module_name)
 
 
 def import_prefs():
-    """Imports preferences modules from packages (apps)."""
+    """Imports preferences modules from packages (apps) and project root."""
     
     # settings.py locals if autodiscover_siteprefs() is in urls.py
     settings_locals = get_frame_locals(3)
