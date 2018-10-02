@@ -2,6 +2,11 @@ django-siteprefs changelog
 ==========================
 
 
+Unreleased
+----------
+* Fixed 'autodiscover_siteprefs' fail on manage.py call w/o arguments.
+
+
 v0.8.1
 ------
 * Better real value type mimic for preference proxy objects.

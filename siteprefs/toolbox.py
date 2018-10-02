@@ -159,7 +159,7 @@ def autodiscover_siteprefs(admin_site=None):
         admin_site = admin.site
 
     # Do not discover anything if called from manage.py (e.g. executing commands from cli).
-    if ('manage' in sys.argv[0] and sys.argv[1] in MANAGE_SAFE_COMMANDS) or 'manage' not in sys.argv[0]:
+    if 'manage' not in sys.argv[0] or (len(sys.argv) > 1 and sys.argv[1] in MANAGE_SAFE_COMMANDS):
         import_prefs()
         Preference.read_prefs(get_prefs())
         register_admin_models(admin_site)
