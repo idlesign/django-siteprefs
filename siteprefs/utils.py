@@ -56,7 +56,74 @@ class PatchedLocal(object):
         self.val = val
 
 
-class PrefProxy(object):
+class Mimic(object):
+    """Mimics other types by implementation of various special methods."""
+
+    value = None
+
+    def __call__(self, *args, **kwargs):
+        return self.value
+
+    def __str__(self):
+        return self.value.__str__()
+
+    def __bool__(self):
+        return self.value.__bool__()
+
+    def __int__(self):
+        return self.value.__int__()
+
+    def __float__(self):
+        return self.value.__float__()
+
+    def __len__(self):
+        return self.value.__len__()
+
+    def __contains__(self, item):
+        return self.value.__contains__(item)
+
+    def __cmp__(self, other):  # pragma: nocover
+        # py2 only
+        return self.value.__cmp__(other)
+
+    def __sub__(self, other):
+        return self.value.__sub__(other)
+
+    def __rsub__(self, other):
+        return self.value.__rsub__(other)
+
+    def __add__(self, other):
+        return self.value.__add__(other)
+
+    def __radd__(self, other):
+        return self.value.__radd__(other)
+
+    def __mul__(self, other):
+        return self.value.__mul__(other)
+
+    def __rmul__(self, other):
+        return self.value.__rmul__(other)
+
+    def __lt__(self, other):
+        return self.value.__lt__(other)
+
+    def __le__(self, other):
+        return self.value.__le__(other)
+
+    def __gt__(self, other):
+        return self.value.__gt__(other)
+
+    def __ge__(self, other):
+        return self.value.__ge__(other)
+
+    def __eq__(self, other):
+        return self.value.__eq__(other)
+
+    def __ne__(self, other):
+        return self.value.__ne__(other)
+
+
+class PrefProxy(Mimic):
     """Objects of this class replace app preferences."""
 
     def __init__(
@@ -104,7 +171,8 @@ class PrefProxy(object):
             self.field = field
             update_field_from_proxy(self.field, self)
 
-    def get_value(self):
+    @property
+    def value(self):
 
         if self.static:
             val = self.default
@@ -118,24 +186,12 @@ class PrefProxy(object):
 
         return self.field.to_python(val)
 
-    def __cmp__(self, other):
-
-        if self.get_value() < other:
-            return -1
-
-        elif self.get_value() > other:
-            return 1
-
-        return 0
-
-    def __call__(self, *args, **kwargs):
-        return self.get_value()
-
-    def __str__(self):
-        return '%s' % self.get_value()
+    def get_value(self):
+        # Deprecated: use .value directly.
+        return self.value
 
     def __repr__(self):
-        return '%s = %s' % (self.name, self.get_value())
+        return '%s = %s' % (self.name, self.value)
 
 
 def get_field_for_proxy(pref_proxy):
