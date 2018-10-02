@@ -2,8 +2,8 @@ django-siteprefs changelog
 ==========================
 
 
-Unreleased
-----------
+v0.8.1
+------
 * Better real value type mimic for preference proxy objects.
 
 
