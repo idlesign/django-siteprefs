@@ -1,5 +1,6 @@
 import inspect
 import os
+from sys import version_info
 from collections import OrderedDict
 from datetime import datetime
 
@@ -18,6 +19,9 @@ from etc.toolbox import import_app_module, import_project_modules
 
 from .signals import prefs_save
 from .settings import PREFS_MODULE_NAME
+
+
+PY2 = (version_info.major == 2)
 
 
 class Frame(object):
@@ -82,10 +86,6 @@ class Mimic(object):
     def __contains__(self, item):
         return self.value.__contains__(item)
 
-    def __cmp__(self, other):  # pragma: nocover
-        # py2 only
-        return self.value.__cmp__(other)
-
     def __sub__(self, other):
         return self.value.__sub__(other)
 
@@ -121,6 +121,32 @@ class Mimic(object):
 
     def __ne__(self, other):
         return self.value.__ne__(other)
+
+    if PY2:
+
+        def __cmp__(self, other):
+            return self.value.__cmp__(other)
+
+        def __nonzero__(self):
+            return self.value.__nonzero__()
+
+        def __lt__(self, other):
+            return self.value < other
+
+        def __le__(self, other):
+            return self.value <= other
+
+        def __gt__(self, other):
+            return self.value > other
+
+        def __ge__(self, other):
+            return self.value >= other
+
+        def __eq__(self, other):
+            return self.value == other
+
+        def __ne__(self, other):
+            return self.value != other
 
 
 class PrefProxy(Mimic):

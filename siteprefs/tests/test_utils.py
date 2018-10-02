@@ -12,6 +12,8 @@ def test_mimic():
         def value(self):
             return self._val
 
+    bool(M(False))
+
     assert M(4)() == 4
     assert str(M('www')) == 'www'
     assert int(M(4)) == 4
