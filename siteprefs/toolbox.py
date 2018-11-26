@@ -246,7 +246,7 @@ def proxy_settings_module(depth=3):
     modules[module_name] = new_module
 
 
-def register_prefs(*args, swap_settings_module=True, **kwargs):
+def register_prefs(*args, **kwargs):
     """Registers preferences that should be handled by siteprefs.
 
     Expects preferences as *args.
@@ -267,6 +267,8 @@ def register_prefs(*args, swap_settings_module=True, **kwargs):
         transparently (so not to bother with calling ``.value`` of ``PrefProxy`` object).
 
     """
+    swap_settings_module = bool(kwargs.get('swap_settings_module', False))
+
     if __PATCHED_LOCALS_SENTINEL not in get_frame_locals(2):
         raise SitePrefsException('Please call `patch_locals()` right before the `register_prefs()`.')
 
