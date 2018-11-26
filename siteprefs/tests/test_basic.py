@@ -26,15 +26,27 @@ def test_many():
     prefs = get_app_prefs('buggy')
     assert len(prefs) == 0
 
-    # Test update prefs triggering.
-    model_cls = get_prefs_models()['testapp']
-    model = model_cls()
-    model.my_option_2 = 'other_value'
-    model.save()
+    def update_option_2(new_value):
+        # Test update prefs triggering.
+        model_cls = get_prefs_models()['testapp']
+        model = model_cls()
+        model.my_option_2 = new_value
+        model.save()
+
+    update_option_2('other_value')
 
     pref = list(Preference.objects.all())[0]
     assert pref.text == 'other_value'
     assert '%s' % pref == 'testapp:my_option_2'
+
+    from siteprefs.tests.testapp import testmodule
+
+    assert testmodule.read_option_2() == 'other_value'
+    assert testmodule.read_not_an_option() == 'not-an-option'
+
+    update_option_2(44)
+
+    assert testmodule.read_option_2() == '44'
 
 
 def test_admin():

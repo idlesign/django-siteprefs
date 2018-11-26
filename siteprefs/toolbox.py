@@ -1,5 +1,6 @@
 import sys
 from collections import OrderedDict
+from types import ModuleType
 
 from django.contrib import admin
 
@@ -89,11 +90,13 @@ def bind_proxy(values, category=None, field=None, verbose_name=None, help_text='
     """
     addrs = OrderedDict()
 
-    for local_name, locals_dict in traverse_local_prefs(3):
+    depth = 3
+
+    for local_name, locals_dict in traverse_local_prefs(depth):
         addrs[id(locals_dict[local_name])] = local_name
 
     proxies = []
-    locals_dict = get_frame_locals(3)
+    locals_dict = get_frame_locals(depth)
 
     for value in values:  # Try to preserve fields order.
 
@@ -177,34 +180,91 @@ def patch_locals():
     get_frame_locals(2)[__PATCHED_LOCALS_SENTINEL] = True  # Sentinel.
 
 
-def unpatch_locals():
+def unpatch_locals(depth=3):
     """Restores the original values of module variables
     considered preferences if they are still PatchedLocal
     and not PrefProxy.
 
     """
-    for name, locals_dict in traverse_local_prefs(3):
-
+    for name, locals_dict in traverse_local_prefs(depth):
         if isinstance(locals_dict[name], PatchedLocal):
             locals_dict[name] = locals_dict[name].val
 
-    del get_frame_locals(3)[__PATCHED_LOCALS_SENTINEL]
+    del get_frame_locals(depth)[__PATCHED_LOCALS_SENTINEL]
 
 
-def register_prefs(*args, **kwargs):
-    """Registers preferences whitch should be handled by siteprefs.
+class ModuleProxy(object):
+    """Proxy to handle module attributes access."""
+
+    def __init__(self):
+        self._module = None  # type: ModuleType
+        self._prefs = []
+
+    def bind(self, module, prefs):
+        """
+        :param ModuleType module:
+        :param list prefs: Preference names. Just to speed up __getattr__.
+        """
+        self._module = module
+        self._prefs = set(prefs)
+
+    def __getattr__(self, name):
+
+        value = getattr(self._module, name)
+
+        if name in self._prefs:
+            # It is a PrefProxy
+            value = value.value
+
+        return value
+
+
+def proxy_settings_module(depth=3):
+    """Replaces a settings module with a Module proxy to intercept
+    an access to settings.
+
+    :param int depth: Frame count to go backward.
+
+    """
+    proxies = []
+
+    modules = sys.modules
+    module_name = get_frame_locals(depth)['__name__']
+
+    module_real = modules[module_name]
+
+    for name, locals_dict in traverse_local_prefs(depth):
+
+        value = locals_dict[name]
+
+        if isinstance(value, PrefProxy):
+            proxies.append(name)
+
+    new_module = type(module_name, (ModuleType, ModuleProxy), {})(module_name)  # ModuleProxy
+    new_module.bind(module_real, proxies)
+
+    modules[module_name] = new_module
+
+
+def register_prefs(*args, swap_settings_module=True, **kwargs):
+    """Registers preferences that should be handled by siteprefs.
+
     Expects preferences as *args.
 
-    Use keyword arguments to apply params supported by
-    PrefProxy to all preferences not enclosed by `pref` and `pref_group`.
+    Use keyword arguments to batch apply params supported by
+    ``PrefProxy`` to all preferences not constructed by ``pref`` and ``pref_group``.
 
-    Accepted kwargs:
+    Batch kwargs:
 
-    :param str|unicode help_text: Field help text.
+        :param str|unicode help_text: Field help text.
 
-    :param bool static: Leave this preference static (do not store in DB).
+        :param bool static: Leave this preference static (do not store in DB).
 
-    :param bool readonly: Make this field read only.
+        :param bool readonly: Make this field read only.
+
+    :param bool swap_settings_module: Whether to automatically replace settings module
+        with a special ``ProxyModule`` object to access dynamic values of settings
+        transparently (so not to bother with calling ``.value`` of ``PrefProxy`` object).
 
     """
     if __PATCHED_LOCALS_SENTINEL not in get_frame_locals(2):
@@ -213,6 +273,8 @@ def register_prefs(*args, **kwargs):
     bind_proxy(args, **kwargs)
 
     unpatch_locals()
+
+    swap_settings_module and proxy_settings_module()
 
 
 def pref_group(title, prefs, help_text='', static=True, readonly=False):
@@ -254,14 +316,15 @@ def pref(preference, field=None, verbose_name=None, help_text='', static=True, r
     :rtype: PrefProxy|None
     """
     try:
-        return bind_proxy(
+        bound = bind_proxy(
             (preference,),
             field=field,
             verbose_name=verbose_name,
             help_text=help_text,
             static=static,
             readonly=readonly,
-        )[0]
+        )
+        return bound[0]
 
     except IndexError:
         return
