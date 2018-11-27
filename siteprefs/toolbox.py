@@ -168,16 +168,16 @@ def autodiscover_siteprefs(admin_site=None):
         register_admin_models(admin_site)
 
 
-def patch_locals():
+def patch_locals(depth=2):
     """Temporarily (see unpatch_locals()) replaces all module variables
     considered preferences with PatchedLocal objects, so that every
     variable has different hash returned by id().
 
     """
-    for name, locals_dict in traverse_local_prefs(2):
+    for name, locals_dict in traverse_local_prefs(depth):
         locals_dict[name] = PatchedLocal(name, locals_dict[name])
 
-    get_frame_locals(2)[__PATCHED_LOCALS_SENTINEL] = True  # Sentinel.
+    get_frame_locals(depth)[__PATCHED_LOCALS_SENTINEL] = True  # Sentinel.
 
 
 def unpatch_locals(depth=3):
@@ -267,7 +267,7 @@ def register_prefs(*args, **kwargs):
         transparently (so not to bother with calling ``.value`` of ``PrefProxy`` object).
 
     """
-    swap_settings_module = bool(kwargs.get('swap_settings_module', False))
+    swap_settings_module = bool(kwargs.get('swap_settings_module', True))
 
     if __PATCHED_LOCALS_SENTINEL not in get_frame_locals(2):
         raise SitePrefsException('Please call `patch_locals()` right before the `register_prefs()`.')
@@ -330,3 +330,33 @@ def pref(preference, field=None, verbose_name=None, help_text='', static=True, r
 
     except IndexError:
         return
+
+
+class preferences(object):
+    """Context manager - main entry point for siteprefs.
+
+    .. code-block:: python
+
+        from siteprefs.toolbox import preferences
+
+        with preferences() as prefs:
+
+            prefs(
+                MY_OPTION_1,
+                prefs.one(MY_OPTION_2, static=False),
+                prefs.group('My Group', [prefs.one(MY_OPTION_42)]),
+            )
+
+    """
+
+    one = staticmethod(pref)
+    group = staticmethod(pref_group)
+
+    __call__ = register_prefs
+
+    def __enter__(self):
+        patch_locals(3)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass

@@ -8,7 +8,9 @@ All of them reside in `siteprefs.toolbox` module. Let's go one by one:
 
 * `register_prefs(*args, **kwargs )`
 
-  The main way to register your settings. Expects preferences as **args** and their options as **kwargs**::
+  The main way to register your settings. Expects preferences as **args** and their options as **kwargs**:
+
+  .. code-block:: python
 
         register_prefs(
             MY_OPT_1,
@@ -20,7 +22,9 @@ All of them reside in `siteprefs.toolbox` module. Let's go one by one:
 
 * `pref_group(group_title, prefs, **kwargs)`
 
-  This allows preferences grouping. Expects a group title, a list of preferences and their options as **kwargs**::
+  This allows preferences grouping. Expects a group title, a list of preferences and their options as **kwargs**:
+
+  .. code-block:: python
 
         register_prefs(
             MY_OPT_1, MY_OPT_2,
@@ -31,7 +35,9 @@ All of them reside in `siteprefs.toolbox` module. Let's go one by one:
 
 * `pref(preference, **kwargs)`
 
-  Used to mark a preference. Expects a preference and its options as **kwargs**::
+  Used to mark a preference. Expects a preference and its options as **kwargs**:
+
+  .. code-block:: python
 
         register_prefs(
             MY_OPT_1, MY_OPT_2,
@@ -40,38 +46,42 @@ All of them reside in `siteprefs.toolbox` module. Let's go one by one:
         )
 
 
+The functions mentioned above are available through a shortcut ``preferences()``
+context manager as mentioned in the Quickstart.
+
+
 Options accepted by prefs
 -------------------------
 
 These are the options accepted as **kwargs** by **siteprefs** helpers:
 
 
-* `static`
+* ``static``
 
   Flag to mark a preference editable from Admin - static are not editable. True by default.
 
-* `readonly`
+* ``readonly``
 
   Flag to mark an [editable] preference read only for Admin. False by default.
 
-* `field`
+* ``field``
 
   Field instance (from django.db.models, e.g. ``BooleanField()``) to represent a sitepref in Admin.
 
   None by default. If None, **siteprefs** will try to determine an appropriate field type for a given
   preference value type.
 
-* `category`
+* ``category``
 
   Category name to group a sitepref under. None by default.
 
 
-* `verbose_name`
+* ``verbose_name``
 
   Preference name to render in Admin.
 
   None by default. If None, a name will be deduces from preference variable name.
 
-* `help_text`
+* ``help_text``
 
   Hint text to render for a preference in Admin. Empty by default.

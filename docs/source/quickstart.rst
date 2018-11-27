@@ -8,7 +8,9 @@ Getting started
 Quick example
 -------------
 
-Let's suppose we created ``MYAPP`` application and now create ``settings.py`` file for it::
+Let's suppose we created ``MYAPP`` application and now create ``settings.py`` file for it:
+
+.. code-block:: python
 
     from django.conf import settings
 
@@ -20,22 +22,28 @@ Let's suppose we created ``MYAPP`` application and now create ``settings.py`` fi
 
 
     if 'siteprefs' in settings.INSTALLED_APPS:  # Respect those users who doesn't have siteprefs installed.
-        from siteprefs.toolbox import patch_locals, register_prefs, pref, pref_group
 
-        patch_locals()  # That's bootstrap.
+        from siteprefs.toolbox import preferences
 
-        register_prefs(  # Now we register our settings to make them available as siteprefs.
-            # First we define a group of related settings, and mark them non-static (editable).
-            pref_group('Mail settings', (ENABLE_MAIL_RECOVERY, ENABLE_MAIL_BOMBS), static=False),
-            SLOGAN,  # This setting stays static non-editable.
-            # And finally we register a non-static setting with extended meta for Admin.
-            pref(ENABLE_GRAVATARS, verbose_name='Enable Gravatar service support', static=False, help_text='This enables Gravatar support.'),
-        )
+        with preferences() as prefs:
+
+            prefs(  # Now we register our settings to make them available as siteprefs.
+                # First we define a group of related settings, and mark them non-static (editable).
+                prefs.group('Mail settings', (ENABLE_MAIL_RECOVERY, ENABLE_MAIL_BOMBS), static=False),
+                SLOGAN,  # This setting stays static non-editable.
+                # And finally we register a non-static setting with extended meta for Admin.
+                prefs.one(
+                    ENABLE_GRAVATARS,
+                    verbose_name='Enable Gravatar service support', static=False,
+                    help_text='This enables Gravatar support.'),
+            )
 
 
 From now on you can view (and edit) your preferences with Django Admin interface.
 
-Access your settings as usual, all changes made to preferences with Admin interface will be respected::
+Access your settings as usual, all changes made to preferences with Admin interface will be respected:
+
+.. code-block:: python
 
     from .settings import ENABLE_MAIL_BOMBS
 
