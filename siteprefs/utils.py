@@ -61,7 +61,11 @@ class PatchedLocal(object):
 
 
 class Mimic(object):
-    """Mimics other types by implementation of various special methods."""
+    """Mimics other types by implementation of various special methods.
+
+    This one is deprecated if favor of setting module proxying (proxy_settings_module()).
+
+    """
 
     value = None
 
@@ -72,13 +76,13 @@ class Mimic(object):
         return self.value.__str__()
 
     def __bool__(self):
-        return self.value.__bool__()
+        return bool(self.value)
 
     def __int__(self):
-        return self.value.__int__()
+        return int(self.value)
 
     def __float__(self):
-        return self.value.__float__()
+        return float(self.value)
 
     def __len__(self):
         return self.value.__len__()
