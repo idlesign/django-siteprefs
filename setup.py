@@ -39,7 +39,9 @@ setup(
     include_package_data=True,
     zip_safe=False,
 
-    install_requires=['django-etc >= 0.9.1'],
+    install_requires=[
+        'django-etc >= 0.9.1',
+    ],
     setup_requires=[] + (['pytest-runner'] if 'test' in sys.argv else []),
 
     test_suite='tests',

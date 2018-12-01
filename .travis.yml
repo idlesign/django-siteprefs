@@ -15,10 +15,10 @@ env:
   - DJANGO="Django>=1.7,<1.8"
 
 install:
-  - pip install -U coverage coveralls django-etc $DJANGO
+  - pip install -U coverage coveralls $DJANGO
 
 script:
-  - coverage run --source=siteprefs setup.py test
+  - coverage run -a --source=siteprefs setup.py test
 
 matrix:
 
