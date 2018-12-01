@@ -2,8 +2,8 @@ django-siteprefs changelog
 ==========================
 
 
-Unreleased
-----------
+v0.9.0
+------
 + IMPORTANT. 'register_prefs' now replaces settins module with a proxy object. No need to call '.get_value()' anymore.
 + Introduced a shortcut 'preferences()' context manager as the main API entry point.
 * Fixed 'autodiscover_siteprefs' fail on manage.py call w/o arguments.
