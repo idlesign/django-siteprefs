@@ -16,7 +16,6 @@ def test_mimic():
 
     assert M(4)() == 4
     assert str(M('www')) == 'www'
-    assert bool(M('some'))
     assert len(M('some')) == 4
     assert int(M(4)) == 4
     assert float(M(4.2)) == 4.2
