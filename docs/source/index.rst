@@ -11,7 +11,7 @@ django-siteprefs allows Django applications settings to come alive.
 Requirements
 ------------
 
-1. Python 2.7+ or 3.4+
+1. Python 2.7+ or 3.5+
 2. Django 1.7+
 3. Django Auth contrib enabled
 4. Django Admin contrib enabled (optional)

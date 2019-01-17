@@ -2,6 +2,11 @@ django-siteprefs changelog
 ==========================
 
 
+Unreleased
+----------
+! Dropped QA for Python 3.4.
+
+
 v0.9.0
 ------
 + IMPORTANT. 'register_prefs' now replaces settins module with a proxy object. No need to call '.get_value()' anymore.
