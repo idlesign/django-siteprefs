@@ -40,7 +40,7 @@ setup(
     zip_safe=False,
 
     install_requires=[
-        'django-etc >= 0.9.1',
+        'django-etc >= 1.2.0',
     ],
     setup_requires=[] + (['pytest-runner'] if 'test' in sys.argv else []),
 

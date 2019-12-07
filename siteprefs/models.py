@@ -1,10 +1,8 @@
 from django.db import models
 from django.db.utils import IntegrityError
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 
-@python_2_unicode_compatible
 class Preference(models.Model):
 
     app = models.CharField(_('Application'), max_length=100, null=True, blank=True, db_index=True)
