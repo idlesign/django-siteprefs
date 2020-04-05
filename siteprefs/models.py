@@ -15,27 +15,28 @@ class Preference(models.Model):
         unique_together = ('app', 'name')
 
     def __str__(self):
-        return '%s:%s' % (self.app, self.name)
+        return f'{self.app}:{self.name}'
 
     @classmethod
-    def read_prefs(cls, mem_prefs):
+    def read_prefs(cls, mem_prefs: dict):
         """Initializes preferences entries in DB according to currently discovered prefs.
 
-        :param dict mem_prefs:
+        :param mem_prefs:
 
         """
         db_prefs = {
-            '%s__%s' % (pref['app'], pref['name']): pref for pref in
+            f"{pref['app']}__{pref['name']}": pref for pref in
             cls.objects.values().order_by('app', 'name')
         }
 
         new_prefs = []
+
         for app, prefs in mem_prefs.items():
 
             for pref_name, pref_proxy in prefs.items():
 
                 if not pref_proxy.static:  # Do not add static options to DB.
-                    key = '%s__%s' % (app, pref_name)
+                    key = f'{app}__{pref_name}'
 
                     if key in db_prefs:
                         # Entry already exists in DB. Let's get pref value from there.

@@ -1,8 +1,11 @@
 import sys
 from collections import OrderedDict
 from types import ModuleType
+from typing import Dict, Union, List, Tuple, Any, Optional
 
 from django.contrib import admin
+from django.contrib.admin import AdminSite
+from django.db.models import Model, Field
 
 from .exceptions import SitePrefsException
 from .models import Preference
@@ -29,7 +32,7 @@ def on_pref_update(*args, **kwargs):
 prefs_save.connect(on_pref_update)
 
 
-def get_prefs():
+def get_prefs() -> dict:
     """Returns a dictionary with all preferences discovered by siteprefs."""
     global __PREFS_REGISTRY
 
@@ -39,12 +42,10 @@ def get_prefs():
     return __PREFS_REGISTRY
 
 
-def get_app_prefs(app=None):
+def get_app_prefs(app: str = None) -> dict:
     """Returns a dictionary with preferences for a certain app/module.
 
-    :param str|unicode app:
-
-    :rtype: dict
+    :param app:
 
     """
     if app is None:
@@ -60,32 +61,35 @@ def get_app_prefs(app=None):
     return prefs[app]
 
 
-def get_prefs_models():
-    """Returns registered preferences models indexed by application names.
-
-    :rtype: dict
-    """
+def get_prefs_models() -> Dict[str, Model]:
+    """Returns registered preferences models indexed by application names."""
     return __MODELS_REGISTRY
 
 
-def bind_proxy(values, category=None, field=None, verbose_name=None, help_text='', static=True, readonly=False):
+def bind_proxy(
+        values: Union[List, Tuple],
+        category: str = None,
+        field: Field = None,
+        verbose_name: str = None,
+        help_text: str = '',
+        static: bool = True,
+        readonly: bool = False
+) -> List[PrefProxy]:
     """Binds PrefProxy objects to module variables used by apps as preferences.
 
-    :param list|tuple values: Preference values.
+    :param values: Preference values.
 
-    :param str|unicode category: Category name the preference belongs to.
+    :param category: Category name the preference belongs to.
 
-    :param Field field: Django model field to represent this preference.
+    :param field: Django model field to represent this preference.
 
-    :param str|unicode verbose_name: Field verbose name.
+    :param verbose_name: Field verbose name.
 
-    :param str|unicode help_text: Field help text.
+    :param help_text: Field help text.
 
-    :param bool static: Leave this preference static (do not store in DB).
+    :param static: Leave this preference static (do not store in DB).
 
-    :param bool readonly: Make this field read only.
-
-    :rtype: list
+    :param readonly: Make this field read only.
 
     """
     addrs = OrderedDict()
@@ -133,10 +137,10 @@ def bind_proxy(values, category=None, field=None, verbose_name=None, help_text='
     return proxies
 
 
-def register_admin_models(admin_site):
+def register_admin_models(admin_site: AdminSite):
     """Registers dynamically created preferences models for Admin interface.
 
-    :param admin.AdminSite admin_site: AdminSite object.
+    :param admin_site: AdminSite object.
 
     """
     global __MODELS_REGISTRY
@@ -152,10 +156,10 @@ def register_admin_models(admin_site):
             admin_site.register(model_class, get_pref_model_admin_class(prefs_items))
 
 
-def autodiscover_siteprefs(admin_site=None):
+def autodiscover_siteprefs(admin_site: AdminSite = None):
     """Automatically discovers and registers all preferences available in all apps.
 
-    :param admin.AdminSite admin_site: Custom AdminSite object.
+    :param admin_site: Custom AdminSite object.
 
     """
     if admin_site is None:
@@ -168,7 +172,7 @@ def autodiscover_siteprefs(admin_site=None):
         register_admin_models(admin_site)
 
 
-def patch_locals(depth=2):
+def patch_locals(depth: int = 2):
     """Temporarily (see unpatch_locals()) replaces all module variables
     considered preferences with PatchedLocal objects, so that every
     variable has different hash returned by id().
@@ -180,7 +184,7 @@ def patch_locals(depth=2):
     get_frame_locals(depth)[__PATCHED_LOCALS_SENTINEL] = True  # Sentinel.
 
 
-def unpatch_locals(depth=3):
+def unpatch_locals(depth: int = 3):
     """Restores the original values of module variables
     considered preferences if they are still PatchedLocal
     and not PrefProxy.
@@ -197,18 +201,19 @@ class ModuleProxy:
     """Proxy to handle module attributes access."""
 
     def __init__(self):
-        self._module = None  # type: ModuleType
+        self._module: Optional[ModuleType] = None
         self._prefs = []
 
-    def bind(self, module, prefs):
+    def bind(self, module: ModuleType, prefs: List[str]):
         """
-        :param ModuleType module:
-        :param list prefs: Preference names. Just to speed up __getattr__.
+        :param module:
+        :param prefs: Preference names. Just to speed up __getattr__.
+
         """
         self._module = module
         self._prefs = set(prefs)
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
 
         value = getattr(self._module, name)
 
@@ -219,11 +224,11 @@ class ModuleProxy:
         return value
 
 
-def proxy_settings_module(depth=3):
+def proxy_settings_module(depth: int = 3):
     """Replaces a settings module with a Module proxy to intercept
     an access to settings.
 
-    :param int depth: Frame count to go backward.
+    :param depth: Frame count to go backward.
 
     """
     proxies = []
@@ -246,7 +251,7 @@ def proxy_settings_module(depth=3):
     modules[module_name] = new_module
 
 
-def register_prefs(*args, **kwargs):
+def register_prefs(*args: PrefProxy, **kwargs):
     """Registers preferences that should be handled by siteprefs.
 
     Expects preferences as *args.
@@ -256,7 +261,7 @@ def register_prefs(*args, **kwargs):
 
     Batch kwargs:
 
-        :param str|unicode help_text: Field help text.
+        :param str help_text: Field help text.
 
         :param bool static: Leave this preference static (do not store in DB).
 
@@ -279,18 +284,24 @@ def register_prefs(*args, **kwargs):
     swap_settings_module and proxy_settings_module()
 
 
-def pref_group(title, prefs, help_text='', static=True, readonly=False):
+def pref_group(
+        title: str,
+        prefs: Union[List, Tuple],
+        help_text: str = '',
+        static: bool = True,
+        readonly: bool = False
+):
     """Marks preferences group.
 
-    :param str|unicode title: Group title
+    :param title: Group title
 
-    :param list|tuple prefs: Preferences to group.
+    :param prefs: Preferences to group.
 
-    :param str|unicode help_text: Field help text.
+    :param help_text: Field help text.
 
-    :param bool static: Leave this preference static (do not store in DB).
+    :param static: Leave this preference static (do not store in DB).
 
-    :param bool readonly: Make this field read only.
+    :param readonly: Make this field read only.
 
     """
     bind_proxy(prefs, title, help_text=help_text, static=static, readonly=readonly)
@@ -300,22 +311,28 @@ def pref_group(title, prefs, help_text='', static=True, readonly=False):
             proxy.category = title
 
 
-def pref(preference, field=None, verbose_name=None, help_text='', static=True, readonly=False):
+def pref(
+        preference: Any,
+        field: Field = None,
+        verbose_name: str = None,
+        help_text: str = '',
+        static: bool = True,
+        readonly: bool = False
+) -> Optional[PrefProxy]:
     """Marks a preference.
 
     :param preference: Preference variable.
 
-    :param Field field: Django model field to represent this preference.
+    :param field: Django model field to represent this preference.
 
-    :param str|unicode verbose_name: Field verbose name.
+    :param verbose_name: Field verbose name.
 
-    :param str|unicode help_text: Field help text.
+    :param help_text: Field help text.
 
-    :param bool static: Leave this preference static (do not store in DB).
+    :param static: Leave this preference static (do not store in DB).
 
-    :param bool readonly: Make this field read only.
+    :param readonly: Make this field read only.
 
-    :rtype: PrefProxy|None
     """
     try:
         bound = bind_proxy(

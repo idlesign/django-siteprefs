@@ -1,7 +1,10 @@
+
 import inspect
 import os
 from collections import OrderedDict
 from datetime import datetime
+from typing import Any, Callable, Type, Generator, Tuple
+from warnings import warn
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -30,7 +33,7 @@ class Frame:
 
     """
 
-    def __init__(self, stepback=0):
+    def __init__(self, stepback: int = 0):
         self.depth = stepback
 
     def __enter__(self):
@@ -49,9 +52,10 @@ class Frame:
 
 class PatchedLocal:
     """Object of this class temporarily replace all module variables
-    considered preferences."""
+    considered preferences.
 
-    def __init__(self, key, val):
+    """
+    def __init__(self, key: str, val: Any):
         self.key = key
         self.val = val
 
@@ -63,7 +67,7 @@ class Mimic:
 
     """
 
-    value = None
+    value: Any = None
 
     def __call__(self, *args, **kwargs):
         return self.value
@@ -127,25 +131,33 @@ class PrefProxy(Mimic):
     """Objects of this class replace app preferences."""
 
     def __init__(
-            self, name, default, category=None, field=None, verbose_name=None, help_text='', static=True,
-            readonly=False):
+            self,
+            name: str,
+            default: Any,
+            category: str = None,
+            field: models.Field = None,
+            verbose_name: str = None,
+            help_text: str = '',
+            static: bool = True,
+            readonly: bool = False
+    ):
         """
 
-        :param str|unicode name: Preference name.
+        :param name: Preference name.
 
         :param default: Default (initial) value.
 
-        :param str|unicode category: Category name the preference belongs to.
+        :param category: Category name the preference belongs to.
 
-        :param Field field: Django model field to represent this preference.
+        :param field: Django model field to represent this preference.
 
-        :param str|unicode verbose_name: Field verbose name.
+        :param verbose_name: Field verbose name.
 
-        :param str|unicode help_text: Field help text.
+        :param help_text: Field help text.
 
-        :param bool static: Leave this preference static (do not store in DB).
+        :param static: Leave this preference static (do not store in DB).
 
-        :param bool readonly: Make this field read only.
+        :param readonly: Make this field read only.
 
         """
         self.name = name
@@ -172,7 +184,7 @@ class PrefProxy(Mimic):
             update_field_from_proxy(self.field, self)
 
     @property
-    def value(self):
+    def value(self) -> Any:
 
         if self.static:
             val = self.default
@@ -186,20 +198,18 @@ class PrefProxy(Mimic):
 
         return self.field.to_python(val)
 
-    def get_value(self):
-        # Deprecated: use .value directly.
+    def get_value(self) -> Any:
+        warn('Please use .value instead .get_value().', DeprecationWarning, stacklevel=2)
         return self.value
 
     def __repr__(self):
-        return '%s = %s' % (self.name, self.value)
+        return f'{self.name} = {self.value}'
 
 
-def get_field_for_proxy(pref_proxy):
+def get_field_for_proxy(pref_proxy: PrefProxy) -> models.Field:
     """Returns a field object instance for a given PrefProxy object.
 
-    :param PrefProxy pref_proxy:
-
-    :rtype: models.Field
+    :param pref_proxy:
 
     """
     field = {
@@ -215,12 +225,12 @@ def get_field_for_proxy(pref_proxy):
     return field
 
 
-def update_field_from_proxy(field_obj, pref_proxy):
+def update_field_from_proxy(field_obj: models.Field, pref_proxy: PrefProxy):
     """Updates field object with data from a PrefProxy object.
 
-    :param models.Field field_obj:
+    :param field_obj:
 
-    :param PrefProxy pref_proxy:
+    :param pref_proxy:
 
     """
     attr_names = ('verbose_name', 'help_text', 'default')
@@ -229,10 +239,10 @@ def update_field_from_proxy(field_obj, pref_proxy):
         setattr(field_obj, attr_name, getattr(pref_proxy, attr_name))
 
 
-def get_pref_model_class(app, prefs, get_prefs_func):
+def get_pref_model_class(app: str, prefs: dict, get_prefs_func: Callable) -> Type[models.Model]:
     """Returns preferences model class dynamically crated for a given app or None on conflict."""
 
-    module = '%s.%s' % (app, PREFS_MODULE_NAME)
+    module = f'{app}.{PREFS_MODULE_NAME}'
 
     model_dict = {
             '_prefs_app': app,
@@ -254,7 +264,9 @@ def get_pref_model_class(app, prefs, get_prefs_func):
     def fake_save_base(self, *args, **kwargs):
 
         updated_prefs = {
-            f.name: getattr(self, f.name) for f in self._meta.fields if not isinstance(f, models.fields.AutoField)
+            f.name: getattr(self, f.name)
+            for f in self._meta.fields
+            if not isinstance(f, models.fields.AutoField)
         }
 
         app_prefs = self._get_prefs(self._prefs_app)
@@ -273,7 +285,7 @@ def get_pref_model_class(app, prefs, get_prefs_func):
     return model
 
 
-def get_pref_model_admin_class(prefs):
+def get_pref_model_admin_class(prefs: dict) -> Type[admin.ModelAdmin]:
 
     by_category = OrderedDict()
     readonly_fields = []
@@ -320,12 +332,10 @@ def get_pref_model_admin_class(prefs):
     return model
 
 
-def get_frame_locals(stepback=0):
+def get_frame_locals(stepback: int = 0) -> dict:
     """Returns locals dictionary from a given frame.
 
-    :param int stepback:
-
-    :rtype: dict
+    :param stepback:
 
     """
     with Frame(stepback=stepback) as frame:
@@ -334,13 +344,11 @@ def get_frame_locals(stepback=0):
     return locals_dict
 
 
-def traverse_local_prefs(stepback=0):
+def traverse_local_prefs(stepback: int = 0) -> Generator[Tuple[str, dict], None, None]:
     """Generator to walk through variables considered as preferences
     in locals dict of a given frame.
 
-    :param int stepback:
-
-    :rtype: tuple
+    :param stepback:
 
     """
     locals_dict = get_frame_locals(stepback+1)
@@ -349,11 +357,11 @@ def traverse_local_prefs(stepback=0):
             yield k, locals_dict
 
 
-def import_module(package, module_name):
+def import_module(package: str, module_name: str):
     """Imports a module from a given package.
 
-    :param str|unicode package:
-    :param str|unicode module_name:
+    :param package:
+    :param module_name:
 
     """
     import_app_module(package, module_name)
