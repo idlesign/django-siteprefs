@@ -9,7 +9,7 @@ class Preference(models.Model):
     name = models.CharField(_('Name'), max_length=150)
     text = models.TextField(_('Value'), null=True, blank=True)
 
-    class Meta(object):
+    class Meta:
         verbose_name = _('Preference')
         verbose_name_plural = _('Preferences')
         unique_together = ('app', 'name')

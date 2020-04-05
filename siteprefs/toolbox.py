@@ -193,7 +193,7 @@ def unpatch_locals(depth=3):
     del get_frame_locals(depth)[__PATCHED_LOCALS_SENTINEL]
 
 
-class ModuleProxy(object):
+class ModuleProxy:
     """Proxy to handle module attributes access."""
 
     def __init__(self):
@@ -332,7 +332,7 @@ def pref(preference, field=None, verbose_name=None, help_text='', static=True, r
         return
 
 
-class preferences(object):
+class preferences:
     """Context manager - main entry point for siteprefs.
 
     .. code-block:: python

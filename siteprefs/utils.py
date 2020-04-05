@@ -20,7 +20,7 @@ from .signals import prefs_save
 from .settings import PREFS_MODULE_NAME
 
 
-class Frame(object):
+class Frame:
     """Represents a frame object at a definite level of hierarchy.
 
     To be used as context manager:
@@ -47,7 +47,7 @@ class Frame(object):
         del self.frame
 
 
-class PatchedLocal(object):
+class PatchedLocal:
     """Object of this class temporarily replace all module variables
     considered preferences."""
 
@@ -56,7 +56,7 @@ class PatchedLocal(object):
         self.val = val
 
 
-class Mimic(object):
+class Mimic:
     """Mimics other types by implementation of various special methods.
 
     This one is deprecated if favor of setting module proxying (proxy_settings_module()).

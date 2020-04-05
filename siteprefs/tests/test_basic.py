@@ -54,7 +54,7 @@ def test_admin():
     return PreferenceAdmin  # not too loose unused import
 
 
-class TestUtils(object):
+class TestUtils:
 
     def test_frame(self):
         with Frame() as f:
