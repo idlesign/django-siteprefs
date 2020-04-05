@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.utils import IntegrityError
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class Preference(models.Model):

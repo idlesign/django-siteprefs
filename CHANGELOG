@@ -4,6 +4,7 @@ django-siteprefs changelog
 
 Unreleased
 ----------
+! Dropped support for Python 2.
 + Added French translations.
 
 
