@@ -8,7 +8,6 @@ from django.contrib.admin import AdminSite
 from django.db.models import Model, Field
 
 from .exceptions import SitePrefsException
-from .models import Preference
 from .settings import MANAGE_SAFE_COMMANDS
 from .signals import prefs_save
 from .utils import import_prefs, get_frame_locals, traverse_local_prefs, get_pref_model_admin_class, \
@@ -26,6 +25,8 @@ def on_pref_update(*args, **kwargs):
      Issues DB save and reread.
 
     """
+    from .models import Preference
+
     Preference.update_prefs(*args, **kwargs)
     Preference.read_prefs(get_prefs())
 
@@ -162,6 +163,8 @@ def autodiscover_siteprefs(admin_site: AdminSite = None):
     :param admin_site: Custom AdminSite object.
 
     """
+    from .models import Preference
+
     if admin_site is None:
         admin_site = admin.site
 
