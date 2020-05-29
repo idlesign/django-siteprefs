@@ -1,11 +1,14 @@
 
 import inspect
 import os
+import sys
+
 from collections import OrderedDict
 from datetime import datetime
 from typing import Any, Callable, Type, Generator, Tuple
 from warnings import warn
 
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -125,6 +128,38 @@ class Mimic:
 
     def __ne__(self, other):
         return self.value.__ne__(other)
+
+    def __repr__(self):
+        return self.value
+
+    # TODO: check/implement list and dict parts of for_json
+    def for_json(self):
+        return {'for_json': self.value}
+
+    # https://bugs.python.org/issue27362
+    def __json__(self):
+        return self.value
+
+    to_json = __json__
+
+
+class PrefProxyJSONEncoder(DjangoJSONEncoder):
+
+    def default(self, o):
+        if isinstance(o, Mimic):
+            return o.value
+        else:
+            return super().default(o)
+
+
+import django.core.serializers.json
+django.core.serializers.json.DjangoJSONEncoder = PrefProxyJSONEncoder
+import django.http.response
+django.http.response.DjangoJSONEncoder = PrefProxyJSONEncoder
+django.http.response.JsonResponse.__init__.__defaults__ = (PrefProxyJSONEncoder, True, None)
+import django.test.client
+django.test.client.DjangoJSONEncoder = PrefProxyJSONEncoder
+django.test.client.RequestFactory.__init__.__kwdefaults__ = {'json_encoder': PrefProxyJSONEncoder}
 
 
 class PrefProxy(Mimic):
