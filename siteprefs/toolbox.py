@@ -28,7 +28,9 @@ def on_pref_update(*args, **kwargs):
     from .models import Preference
 
     Preference.update_prefs(*args, **kwargs)
-    Preference.read_prefs(get_prefs())
+    prefs = get_prefs()
+    populate_django_settings(prefs)
+    Preference.read_prefs(prefs)
 
 prefs_save.connect(on_pref_update)
 
@@ -157,6 +159,14 @@ def register_admin_models(admin_site: AdminSite):
             admin_site.register(model_class, get_pref_model_admin_class(prefs_items))
 
 
+def populate_django_settings(mem_prefs: dict):
+    from django.conf import settings
+
+    for app, prefs in mem_prefs.items():
+        for pref_name, pref_proxy in prefs.items():
+            setattr(settings, pref_name.upper(), pref_proxy)
+
+
 def autodiscover_siteprefs(admin_site: AdminSite = None):
     """Automatically discovers and registers all preferences available in all apps.
 
@@ -171,7 +181,9 @@ def autodiscover_siteprefs(admin_site: AdminSite = None):
     # Do not discover anything if called from manage.py (e.g. executing commands from cli).
     if 'manage' not in sys.argv[0] or (len(sys.argv) > 1 and sys.argv[1] in MANAGE_SAFE_COMMANDS):
         import_prefs()
-        Preference.read_prefs(get_prefs())
+        prefs = get_prefs()
+        Preference.read_prefs(prefs)
+        populate_django_settings(prefs)
         register_admin_models(admin_site)
 
 
