@@ -93,6 +93,9 @@ class Mimic:
     def __contains__(self, item):
         return self.value.__contains__(item)
 
+    def __getitem__(self, item):
+        return self.value[item]
+
     def __sub__(self, other):
         return self.value.__sub__(other)
 
