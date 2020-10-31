@@ -6,21 +6,13 @@ from datetime import datetime
 from typing import Any, Callable, Type, Generator, Tuple
 from warnings import warn
 
+from django.contrib import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-try:
-    from django.utils.module_loading import import_module as import_module_
-
-except ImportError:
-    # Django <=1.9.0
-    from django.utils.importlib import import_module as import_module_
-
-from django.contrib import admin
 from etc.toolbox import import_app_module, import_project_modules
 
-from .signals import prefs_save
 from .settings import PREFS_MODULE_NAME
+from .signals import prefs_save
 
 
 class Frame:
