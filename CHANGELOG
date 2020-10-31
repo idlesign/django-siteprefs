@@ -4,6 +4,7 @@ django-siteprefs changelog
 
 Unreleased
 ----------
+* Dropped QA for Django < 2.0.
 * Fixed deprecation warning.
 
 
