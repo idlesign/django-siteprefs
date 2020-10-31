@@ -2,8 +2,8 @@ django-siteprefs changelog
 ==========================
 
 
-Unreleased
-----------
+v1.2.1 [2020-10-31]
+-------------------
 * Dropped QA for Django < 2.0.
 * Fixed deprecation warning.
 
