@@ -1,3 +1,4 @@
+import logging
 import sys
 from collections import OrderedDict
 from types import ModuleType
@@ -5,11 +6,11 @@ from typing import Dict, Union, List, Tuple, Any, Optional
 
 from django.contrib import admin
 from django.contrib.admin import AdminSite
+from django.db import DatabaseError
 from django.db.models import Model, Field
 
 from .exceptions import SitePrefsException
 from .models import Preference
-from .settings import MANAGE_SAFE_COMMANDS
 from .signals import prefs_save
 from .utils import import_prefs, get_frame_locals, traverse_local_prefs, get_pref_model_admin_class, \
     get_pref_model_class, PrefProxy, PatchedLocal, Frame
@@ -19,6 +20,8 @@ __PATCHED_LOCALS_SENTINEL = '__siteprefs_locals_patched'
 __PREFS_REGISTRY = None
 __PREFS_DEFAULT_REGISTRY = OrderedDict()
 __MODELS_REGISTRY = {}
+
+LOGGER = logging.getLogger(__name__)
 
 
 def on_pref_update(*args, **kwargs):
@@ -162,13 +165,19 @@ def autodiscover_siteprefs(admin_site: AdminSite = None):
     :param admin_site: Custom AdminSite object.
 
     """
-    if admin_site is None:
-        admin_site = admin.site
+    import_prefs()
 
-    # Do not discover anything if called from manage.py (e.g. executing commands from cli).
-    if 'manage' not in sys.argv[0] or (len(sys.argv) > 1 and sys.argv[1] in MANAGE_SAFE_COMMANDS):
-        import_prefs()
+    try:
         Preference.read_prefs(get_prefs())
+
+    except DatabaseError:
+        # This may occur if run from manage.py (or its wrapper) when db is not yet initialized.
+        LOGGER.warning('Unable to read preferences from database. Skip.')
+
+    else:
+        if admin_site is None:
+            admin_site = admin.site
+
         register_admin_models(admin_site)
 
 

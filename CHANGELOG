@@ -2,6 +2,11 @@ django-siteprefs changelog
 ==========================
 
 
+Unreleased
+----------
+* 'autodiscover_siteprefs()' behaviour on missing DB reworked. 'MANAGE_SAFE_COMMANDS' setting is now ignored.
+
+
 v1.2.1 [2020-10-31]
 -------------------
 * Dropped QA for Django < 2.0.
