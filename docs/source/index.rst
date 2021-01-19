@@ -31,6 +31,7 @@ Table of Contents
 
     quickstart
     registration
+    settings
 
 
 Get involved into django-siteprefs
