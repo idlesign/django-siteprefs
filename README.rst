@@ -11,9 +11,6 @@ http://github.com/idlesign/django-siteprefs
 .. image:: https://img.shields.io/coveralls/idlesign/django-siteprefs/master.svg
     :target: https://coveralls.io/r/idlesign/django-siteprefs
 
-.. image:: https://img.shields.io/travis/idlesign/django-siteprefs/master.svg
-    :target: https://travis-ci.org/idlesign/django-siteprefs
-
 
 What's that
 -----------
