@@ -1,3 +1,0 @@
-[run]
-include = siteprefs/*
-omit = siteprefs/migrations/*, siteprefs/tests/*
