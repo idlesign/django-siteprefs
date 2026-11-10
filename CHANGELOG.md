@@ -1,149 +1,96 @@
-django-siteprefs changelog
-==========================
+# django-siteprefs changelog
 
+### v1.2.3 [2021-12-18]
+* ** Django 4.0 compatibility improved.
 
-v1.2.3 [2021-12-18]
--------------------
-* Django 4.0 compatibility improved.
+### v1.2.2 [2021-01-19]
+* ** 'autodiscover_siteprefs()' behaviour on missing DB reworked. 'MANAGE_SAFE_COMMANDS' setting is now ignored.
 
+### v1.2.1 [2020-10-31]
+* ** Dropped QA for Django < 2.0.
+* ** Fixed deprecation warning.
 
-v1.2.2 [2021-01-19]
--------------------
-* 'autodiscover_siteprefs()' behaviour on missing DB reworked. 'MANAGE_SAFE_COMMANDS' setting is now ignored.
+### v1.2.0 [2020-04-05]
+* !! Dropped support for Python 2.
+* !! Dropped support for Python 3.5.
+* ++ Added French translations.
 
+### v1.1.0 [2019-12-07]
+* !! Dropped QA for Django 1.7.
+* !! Dropped QA for Python 2.
+* ++ Add Django 3.0 compatibility.
 
-v1.2.1 [2020-10-31]
--------------------
-* Dropped QA for Django < 2.0.
-* Fixed deprecation warning.
+### v1.0.0
+* !! Dropped QA for Python 3.4.
+* ** No functional changes. Celebrating 1.0.0.
 
+### v0.9.0
+* ++ IMPORTANT. 'register_prefs' now replaces settins module with a proxy object. No need to call '.get_value()' anymore.
+* ++ Introduced a shortcut 'preferences()' context manager as the main API entry point.
+* ** Fixed 'autodiscover_siteprefs' fail on manage.py call w/o arguments.
+* ** Mimic class fixes.
 
-v1.2.0 [2020-04-05]
--------------------
-! Dropped support for Python 2.
-! Dropped support for Python 3.5.
-+ Added French translations.
+### v0.8.1
+* ** Better real value type mimic for preference proxy objects.
 
+### v0.8.0
+* ++ Usability, code and docstrings improvements.
 
-v1.1.0 [2019-12-07]
--------------------
-! Dropped QA for Django 1.7.
-! Dropped QA for Python 2.
-+ Add Django 3.0 compatibility.
+### v0.7.0
+* ++ Django 2.0 basic compatibility.
+* ** Dropped support for Python<3.4 and Django<1.7.
 
+### v0.6.3
+* ** Package distribution fix
 
-v1.0.0
-------
-! Dropped QA for Python 3.4.
-* No functional changes. Celebrating 1.0.0.
+### v0.6.2
+* ** Dummy. Never released.
 
+### v0.6.1
+* ** import_prefs() regression fix.
 
-v0.9.0
-------
-+ IMPORTANT. 'register_prefs' now replaces settins module with a proxy object. No need to call '.get_value()' anymore.
-+ Introduced a shortcut 'preferences()' context manager as the main API entry point.
-* Fixed 'autodiscover_siteprefs' fail on manage.py call w/o arguments.
-* Mimic class fixes.
+### v0.6.0
+* ** IMPORTANT: added dependency - django-etc.
+* ** IMPORTANT: manual autodiscover_siteprefs() call is not required after Django 1.7.
+* ** Fixed KeyError in import_prefs (see #10)
 
+### v0.5.3
+* ** IMPORTANT: added dependency - django-etc (fixed #13).
 
-v0.8.1
-------
-* Better real value type mimic for preference proxy objects.
+### v0.5.2
+* ** Fixed `manage` commands fail due to `autodiscover_siteprefs()` on Django 1.9.
 
+### v0.5.1
+* ** Django 1.9 compatibility improvements.
 
-v0.8.0
-------
-+ Usability, code and docstrings improvements.
+### v0.5.0
+* ++ Djagno 1.7 ready.
+* ++ Added Polish loco.
 
+### v0.4.0
+* ++ pref_group() now accepts prefs already marked by pref().
 
-v0.7.0
-------
-+ Django 2.0 basic compatibility.
-* Dropped support for Python<3.4 and Django<1.7.
+### v0.3.3
+* ** Fixed UnicodeEncodeError in siteprefs/utils.py on Py 3 (closes #8)
 
+### v0.3.2
+* ** Fixed some `pref()` arguments disrespected if field object is passed in `field` argument (closes #7)
 
-v0.6.3
-------
-* Package distribution fix
+### v0.3.1
+* ** Fixed admin field render when field type is passed into pref() (see #6).
 
+### v0.3.0
+* ++ Added support for datetime fields
+* ++ Added MANAGE_SAFE_COMMANDS setting
+* ** Fixed PrefProxy.__str__() behaviour.
 
-v0.6.2
-------
-* Dummy. Never released.
+### v0.2.1
+* ++ Added support for pre Django 1.4 projects layouts.
+* ** Fixed failure to autodiscover settings on Django dev server.
 
+### v0.2.0
+* ** Slight API changes.
+* ** Minor fixes.
 
-v0.6.1
-------
-* import_prefs() regression fix.
-
-
-v0.6.0
-------
-* IMPORTANT: added dependency - django-etc.
-* IMPORTANT: manual autodiscover_siteprefs() call is not required after Django 1.7.
-* Fixed KeyError in import_prefs (see #10)
-
-
-v0.5.3
-------
-* IMPORTANT: added dependency - django-etc (fixed #13).
-
-
-v0.5.2
-------
-* Fixed `manage` commands fail due to `autodiscover_siteprefs()` on Django 1.9.
-
-
-v0.5.1
-------
-* Django 1.9 compatibility improvements.
-
-
-v0.5.0
-------
-+ Djagno 1.7 ready.
-+ Added Polish loco.
-
-
-v0.4.0
-------
-+ pref_group() now accepts prefs already marked by pref().
-
-
-v0.3.3
-------
-* Fixed UnicodeEncodeError in siteprefs/utils.py on Py 3 (closes #8)
-
-
-v0.3.2
-------
-* Fixed some `pref()` arguments disrespected if field object is passed in `field` argument (closes #7)
-
-
-v0.3.1
-------
-* Fixed admin field render when field type is passed into pref() (see #6).
-
-
-v0.3.0
-------
-+ Added support for datetime fields
-+ Added MANAGE_SAFE_COMMANDS setting
-* Fixed PrefProxy.__str__() behaviour.
-
-
-v0.2.1
-------
-+ Added support for pre Django 1.4 projects layouts.
-* Fixed failure to autodiscover settings on Django dev server.
-
-
-v0.2.0
-------
-* Slight API changes.
-* Minor fixes.
-
-
-v0.1.0
-------
-+ Basic siteprefs functionality.
+### v0.1.0
+* ++ Basic siteprefs functionality.

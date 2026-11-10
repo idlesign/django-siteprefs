@@ -183,7 +183,7 @@ class PrefProxy(Mimic):
 
         else:
             try:
-                val = getattr(self, 'db_value')
+                val = self.db_value
 
             except AttributeError:
                 val = self.default

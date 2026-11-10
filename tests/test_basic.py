@@ -9,7 +9,7 @@ from siteprefs.utils import Frame, PatchedLocal, PrefProxy, get_field_for_proxy,
 
 
 def test_many():
-    __package__ = 'siteprefs.tests.testapp'
+    __package__ = 'tests.testapp'
 
     autodiscover_siteprefs()
 
@@ -35,11 +35,11 @@ def test_many():
 
     update_option_2('other_value')
 
-    pref = list(Preference.objects.all())[0]
+    pref = Preference.objects.first()
     assert pref.text == 'other_value'
     assert '%s' % pref == 'testapp:my_option_2'
 
-    from siteprefs.tests.testapp import testmodule
+    from tests.testapp import testmodule
 
     assert testmodule.read_option_2() == 'other_value'
     assert testmodule.read_not_an_option() == 'not-an-option'
@@ -124,7 +124,8 @@ class TestUtils:
         p3 = PrefProxy('pp3', 'admin', field=models.CharField(max_length=10))
         p4 = PrefProxy('pp4', 'another', verbose_name='verbosed', static=False, field=models.CharField(max_length=10))
 
-        my_prefs_func = lambda: 'yes'
+        def my_prefs_func():
+            return 'yes'
 
         cl = get_pref_model_class('testapp', {'pp1': p1, 'pp2': p2, 'pp3': p3, 'pp4': p4}, my_prefs_func)
 

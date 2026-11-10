@@ -9,6 +9,7 @@ class SiteprefsConfig(AppConfig):
 
     name = 'siteprefs'
     verbose_name = _('Site Preferences')
+    default_auto_field = 'django.db.models.AutoField'
 
     def ready(self):
 

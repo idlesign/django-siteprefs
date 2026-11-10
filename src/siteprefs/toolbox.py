@@ -210,7 +210,7 @@ class ModuleProxy:
     """Proxy to handle module attributes access."""
 
     def __init__(self):
-        self._module: Optional[ModuleType] = None
+        self._module: ModuleType | None = None
         self._prefs = []
 
     def bind(self, module: ModuleType, prefs: List[str]):
@@ -327,7 +327,7 @@ def pref(
         help_text: str = '',
         static: bool = True,
         readonly: bool = False
-) -> Optional[PrefProxy]:
+) -> PrefProxy | None:
     """Marks a preference.
 
     :param preference: Preference variable.

@@ -1,19 +1,13 @@
-django-siteprefs Authors
-========================
+# django-siteprefs authors
 
-Created by Igor 'idle sign' Starikov.
+Created by Igor `idle sign` Starikov.
 
+## Contributors
 
-Contributors
-------------
+* Brian Schott <https://github.com/electroniceagle>
 
-Brian Schott <https://github.com/electroniceagle>
+## Translators
 
-
-
-Translators
------------
-
-Russian: Igor Starikov <https://www.transifex.com/accounts/profile/idlesign/>
-Polish: Alexey Subbotin <https://www.transifex.com/accounts/profile/dotsbb/>
-French: Jean-Etienne Castagnede <https://www.transifex.com/user/profile/submarcos/>
+* Russian: Igor Starikov <https://www.transifex.com/accounts/profile/idlesign/>
+* Polish: Alexey Subbotin <https://www.transifex.com/accounts/profile/dotsbb/>
+* French: Jean-Etienne Castagnede <https://www.transifex.com/user/profile/submarcos/>
