@@ -1,5 +1,8 @@
 # django-siteprefs changelog
 
+### Unreleased
+* ** Pinned default_auto_field to AutoField to prevent id field drift on Django 6.1.
+
 ### v1.2.3 [2021-12-18]
 * ** Django 4.0 compatibility improved.
 
