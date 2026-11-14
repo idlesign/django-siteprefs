@@ -1,6 +1,7 @@
 # django-siteprefs changelog
 
 ### Unreleased
+* ++ Added register_project_prefs() to declare project-wide preferences right in a project settings module.
 * ++ SITEPREFS_MODULE_NAME now accepts a list of module names (e.g. ['settings', 'app_settings']) in addition to a single name (close #22).
 * ** Admin models registration no longer requires a ready database; preferences fall back to their defaults until the DB becomes available (see #21).
 * ** Dynamic preferences models now have a truthful representation (e.g. <dynamic preferences model for 'foo'>) instead of a misleading class path (close #26).
