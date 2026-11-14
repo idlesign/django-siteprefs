@@ -134,6 +134,7 @@ class TestUtils:
         assert issubclass(cl, models.Model)
         assert isinstance(model._meta.fields[3], models.CharField)
         assert model._meta.fields[4].verbose_name == 'verbosed'
+        assert repr(cl) == "<dynamic preferences model for 'testapp'>"
 
     def test_get_pref_model_admin_class(self):
 

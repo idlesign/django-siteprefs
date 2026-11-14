@@ -8,6 +8,7 @@ from warnings import warn
 
 from django.contrib import admin
 from django.db import models
+from django.db.models.base import ModelBase
 from django.utils.translation import gettext_lazy as _
 from etc.toolbox import import_app_module, import_project_modules
 
@@ -217,6 +218,13 @@ def get_field_for_proxy(pref_proxy: PrefProxy) -> models.Field:
     return field
 
 
+class PreferencesModelBase(ModelBase):
+    """Metaclass for dynamic preferences models, providing a truthful representation."""
+
+    def __repr__(cls) -> str:
+        return f"<dynamic preferences model for '{cls._meta.app_label}'>"
+
+
 def update_field_from_proxy(field_obj: models.Field, pref_proxy: PrefProxy):
     """Updates field object with data from a PrefProxy object.
 
@@ -251,7 +259,7 @@ def get_pref_model_class(app: str, prefs: dict, get_prefs_func: Callable) -> Typ
     for field_name, val_proxy in prefs.items():
         model_dict[field_name] = val_proxy.field
 
-    model = type('Preferences', (models.Model,), model_dict)
+    model = PreferencesModelBase('Preferences', (models.Model,), model_dict)
 
     def fake_save_base(self, *args, **kwargs):
 
