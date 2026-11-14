@@ -153,4 +153,4 @@ class TestUtils:
 
     @pytest.mark.xfail(strict=True)
     def test_import_module(self):
-        import_module('dummy', PREFS_MODULE_NAME)
+        import_module('dummy', PREFS_MODULE_NAME[0])

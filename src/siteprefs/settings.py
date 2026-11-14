@@ -14,5 +14,4 @@ A single module name or an iterable of names (e.g. ``['settings', 'app_settings'
 
 """
 
-PREFS_MODULE_NAMES = (PREFS_MODULE_NAME,) if isinstance(PREFS_MODULE_NAME, str) else tuple(PREFS_MODULE_NAME)
-"""Module names used by autodiscovery to find preferences in application packages."""
+PREFS_MODULE_NAME = (PREFS_MODULE_NAME,) if isinstance(PREFS_MODULE_NAME, str) else tuple(PREFS_MODULE_NAME)

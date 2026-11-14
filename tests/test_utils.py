@@ -50,7 +50,6 @@ def test_mimic():
 
 
 def test_prefs_module_names():
-    from siteprefs.settings import PREFS_MODULE_NAME, PREFS_MODULE_NAMES
+    from siteprefs.settings import PREFS_MODULE_NAME
 
-    assert isinstance(PREFS_MODULE_NAMES, tuple)
-    assert PREFS_MODULE_NAMES == (PREFS_MODULE_NAME,)
+    assert PREFS_MODULE_NAME == ("settings",)

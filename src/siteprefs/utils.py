@@ -12,7 +12,7 @@ from django.db.models.base import ModelBase
 from django.utils.translation import gettext_lazy as _
 from etc.toolbox import import_app_module, import_project_modules
 
-from .settings import PREFS_MODULE_NAME, PREFS_MODULE_NAMES
+from .settings import PREFS_MODULE_NAME
 from .signals import prefs_save
 
 
@@ -242,7 +242,7 @@ def update_field_from_proxy(field_obj: models.Field, pref_proxy: PrefProxy):
 def get_pref_model_class(app: str, prefs: dict, get_prefs_func: Callable) -> Type[models.Model]:
     """Returns preferences model class dynamically crated for a given app or None on conflict."""
 
-    module = f'{app}.{PREFS_MODULE_NAMES[0]}'
+    module = f'{app}.{PREFS_MODULE_NAME[0]}'
 
     model_dict = {
             '_prefs_app': app,
@@ -381,8 +381,8 @@ def import_prefs():
             # Fallback to old layout.
             project_package = os.path.split(os.path.dirname(settings_locals['__file__']))[-1]
 
-        for module_name in PREFS_MODULE_NAMES:
+        for module_name in PREFS_MODULE_NAME:
             import_module(project_package, module_name)
 
-    for module_name in PREFS_MODULE_NAMES:
+    for module_name in PREFS_MODULE_NAME:
         import_project_modules(module_name)
