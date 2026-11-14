@@ -2,6 +2,7 @@
 
 ### Unreleased
 * ++ SITEPREFS_MODULE_NAME now accepts a list of module names (e.g. ['settings', 'app_settings']) in addition to a single name (close #22).
+* ** Admin models registration no longer requires a ready database; preferences fall back to their defaults until the DB becomes available (see #21).
 * ** Dynamic preferences models now have a truthful representation (e.g. <dynamic preferences model for 'foo'>) instead of a misleading class path (close #26).
 * ** Pinned default_auto_field to AutoField to prevent id field drift on Django 6.1.
 
