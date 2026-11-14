@@ -1,6 +1,12 @@
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
 import pytest
 from django.contrib import admin
 from django.db import models
+from django.db import DatabaseError
 
 from siteprefs.models import Preference
 from siteprefs.toolbox import autodiscover_siteprefs, get_app_prefs, get_prefs_models
@@ -157,8 +163,6 @@ class TestUtils:
 
 
 def test_autodiscover_db_unavailable(monkeypatch):
-    from django.db import DatabaseError
-
     def raise_db_error(prefs):
         raise DatabaseError("simulated")
 
@@ -174,11 +178,6 @@ def test_autodiscover_db_unavailable(monkeypatch):
 
 def test_register_project_prefs():
     """Project-wide preferences can be declared in a project settings module."""
-
-    import subprocess
-    import sys
-    import tempfile
-    from pathlib import Path
 
     proj = Path(tempfile.mkdtemp())
     (proj / "myproj").mkdir()
