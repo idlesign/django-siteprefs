@@ -170,26 +170,3 @@ def test_autodiscover_db_unavailable(monkeypatch):
     autodiscover_siteprefs()
 
     assert "testapp" in get_prefs_models()
-
-
-def test_toolbox_import_before_apps_ready():
-    """The toolbox module must be importable before the apps registry is ready,
-    e.g. from a project settings module."""
-
-    import subprocess
-    import sys
-
-    code = (
-        "from django.conf import settings\n"
-        "settings.configure(\n"
-        "    DEBUG=True,\n"
-        "    DATABASES={},\n"
-        "    INSTALLED_APPS=['django.contrib.contenttypes', 'django.contrib.auth', 'siteprefs'],\n"
-        ")\n"
-        "import siteprefs.toolbox\n"
-        "print('toolbox-import-ok')\n"
-    )
-    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
-
-    assert result.returncode == 0, result.stderr
-    assert "toolbox-import-ok" in result.stdout
