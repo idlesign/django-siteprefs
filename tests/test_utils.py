@@ -47,3 +47,10 @@ def test_mimic():
     assert M(4) != 5
     assert len(M('some')) == 4
     assert 'ome' in M('some')
+
+
+def test_prefs_module_names():
+    from siteprefs.settings import PREFS_MODULE_NAME, PREFS_MODULE_NAMES
+
+    assert isinstance(PREFS_MODULE_NAMES, tuple)
+    assert PREFS_MODULE_NAMES == (PREFS_MODULE_NAME,)

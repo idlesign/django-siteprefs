@@ -13,3 +13,5 @@ Disables preferences autodiscovery on Django apps registry ready. Default: false
 ## SITEPREFS_MODULE_NAME
 
 Module name used by siteprefs.toolbox.autodiscover_siteprefs() to find preferences in application packages.
+
+A single module name or a list of names may be given, e.g. ``SITEPREFS_MODULE_NAME = ['settings', 'app_settings']``.
