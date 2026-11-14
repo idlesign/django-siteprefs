@@ -5,6 +5,7 @@ Created by Igor `idle sign` Starikov.
 ## Contributors
 
 * Brian Schott <https://github.com/electroniceagle>
+* John Vandenberg <https://github.com/jayvdb>
 
 ## Translators
 
