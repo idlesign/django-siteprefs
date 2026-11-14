@@ -4,6 +4,7 @@ from collections import OrderedDict
 from types import ModuleType
 from typing import Dict, Union, List, Tuple, Any, Optional
 
+from django.conf import settings as django_settings
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.db import DatabaseError
@@ -360,6 +361,43 @@ def pref(
 
     except IndexError:
         return
+
+
+def register_project_prefs(*, static: bool = False, readonly: bool = False, **prefs: Any) -> List[PrefProxy]:
+    """Registers project-wide preferences (e.g. declared in a project settings module).
+
+    Unlike the app-level `preferences()` context manager, this function takes
+    values directly and doesn't rely on frame introspection.
+
+    .. code-block:: python
+
+        # settings.py of a project
+        from siteprefs.toolbox import register_project_prefs
+
+        PROJECT_WIDE_PREF = 'initial'
+
+        register_project_prefs(PROJECT_WIDE_PREF=PROJECT_WIDE_PREF)
+
+    :param static: Leave preferences static (do not store in DB, not editable in Admin).
+    :param readonly: Make fields read only.
+    :param prefs: Preference names with their default values.
+
+    """
+    project = django_settings.SETTINGS_MODULE.split('.')[0]
+
+    registry = get_prefs()
+
+    if project not in registry:
+        registry[project] = OrderedDict()
+
+    proxies = []
+
+    for name, value in prefs.items():
+        proxy = PrefProxy(name, value, static=static, readonly=readonly)
+        registry[project][name.lower()] = proxy
+        proxies.append(proxy)
+
+    return proxies
 
 
 class preferences:

@@ -48,3 +48,19 @@ def bombing():
 ```
 
 And mind that we've barely made a scratch of **siteprefs**.
+
+## Project-wide preferences
+
+Preferences can also be declared in a project settings module (i.e. not bound to any application)
+using ``register_project_prefs``:
+
+```python title="settings.py"
+from siteprefs.toolbox import register_project_prefs
+
+PROJECT_WIDE_PREF = 'initial'
+
+register_project_prefs(PROJECT_WIDE_PREF=PROJECT_WIDE_PREF)
+```
+
+Such preferences are registered under the project package and are editable in the Admin interface
+unless declared ``static=True``.

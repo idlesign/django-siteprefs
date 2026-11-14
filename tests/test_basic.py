@@ -170,3 +170,46 @@ def test_autodiscover_db_unavailable(monkeypatch):
     autodiscover_siteprefs()
 
     assert "testapp" in get_prefs_models()
+
+
+def test_register_project_prefs():
+    """Project-wide preferences can be declared in a project settings module."""
+
+    import subprocess
+    import sys
+    import tempfile
+    from pathlib import Path
+
+    proj = Path(tempfile.mkdtemp())
+    (proj / "myproj").mkdir()
+    (proj / "myproj" / "__init__.py").write_text("")
+    (proj / "myproj" / "urls.py").write_text("urlpatterns = []\n")
+    (proj / "myproj" / "settings.py").write_text(
+        "DEBUG = True\n"
+        'DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}\n'
+        'INSTALLED_APPS = ["django.contrib.contenttypes", "django.contrib.auth", "django.contrib.admin",'
+        ' "django.contrib.messages", "django.contrib.sessions", "siteprefs"]\n'
+        'SECRET_KEY = "x"\n'
+        "\n"
+        'PROJECT_WIDE_PREF = "initial"\n'
+        "\n"
+        "from siteprefs.toolbox import register_project_prefs\n"
+        "\n"
+        "register_project_prefs(PROJECT_WIDE_PREF=PROJECT_WIDE_PREF)\n"
+    )
+
+    code = (
+        f"import sys; sys.path.insert(0, {str(proj)!r})\n"
+        'import os; os.environ["DJANGO_SETTINGS_MODULE"] = "myproj.settings"\n'
+        "import django; django.setup()\n"
+        "from siteprefs.toolbox import get_prefs\n"
+        "prefs = get_prefs()\n"
+        'assert "myproj" in prefs, prefs.keys()\n'
+        'assert prefs["myproj"]["project_wide_pref"].value == "initial"\n'
+        'print("project-prefs-ok")\n'
+    )
+
+    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
+
+    assert result.returncode == 0, result.stderr
+    assert "project-prefs-ok" in result.stdout
