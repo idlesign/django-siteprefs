@@ -5,6 +5,7 @@
 * ** Admin models registration no longer requires a ready database; preferences fall back to their defaults until the DB becomes available (see #21).
 * ** Dynamic preferences models now have a truthful representation (e.g. <dynamic preferences model for 'foo'>) instead of a misleading class path (close #26).
 * ** Pinned default_auto_field to AutoField to prevent id field drift on Django 6.1.
+* ** The toolbox module can now be imported early (e.g. from a project settings module): the Preference model import is deferred until first use (close #24).
 
 ### v1.2.3 [2021-12-18]
 * ** Django 4.0 compatibility improved.
