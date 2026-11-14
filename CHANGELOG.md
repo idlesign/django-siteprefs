@@ -1,6 +1,7 @@
 # django-siteprefs changelog
 
 ### Unreleased
+* ** Dynamic preferences models now have a truthful representation (e.g. <dynamic preferences model for 'foo'>) instead of a misleading class path (close #26).
 * ** Pinned default_auto_field to AutoField to prevent id field drift on Django 6.1.
 
 ### v1.2.3 [2021-12-18]
