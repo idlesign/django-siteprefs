@@ -29,7 +29,7 @@ def on_pref_update(*args, **kwargs):
      Issues DB save and reread.
 
     """
-    from .models import Preference
+    from .models import Preference  # noqa: PLC0415 - deferred so the toolbox can be imported before apps are ready
 
     Preference.update_prefs(*args, **kwargs)
     Preference.read_prefs(get_prefs())
@@ -167,7 +167,7 @@ def autodiscover_siteprefs(admin_site: AdminSite = None):
     :param admin_site: Custom AdminSite object.
 
     """
-    from .models import Preference
+    from .models import Preference  # noqa: PLC0415 - deferred so the toolbox can be imported before apps are ready
 
     import_prefs()
 
