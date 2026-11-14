@@ -171,14 +171,15 @@ def autodiscover_siteprefs(admin_site: AdminSite = None):
         Preference.read_prefs(get_prefs())
 
     except DatabaseError:
-        # This may occur if run from manage.py (or its wrapper) when db is not yet initialized.
+        # The DB may not be initialized yet (e.g. when run from a management
+        # command). Preferences fall back to their defaults; admin registration
+        # does not require the database.
         LOGGER.warning('Unable to read preferences from database. Skip.')
 
-    else:
-        if admin_site is None:
-            admin_site = admin.site
+    if admin_site is None:
+        admin_site = admin.site
 
-        register_admin_models(admin_site)
+    register_admin_models(admin_site)
 
 
 def patch_locals(depth: int = 2):

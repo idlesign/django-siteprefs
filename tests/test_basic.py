@@ -154,3 +154,19 @@ class TestUtils:
     @pytest.mark.xfail(strict=True)
     def test_import_module(self):
         import_module('dummy', PREFS_MODULE_NAME[0])
+
+
+def test_autodiscover_db_unavailable(monkeypatch):
+    from django.db import DatabaseError
+
+    def raise_db_error(prefs):
+        raise DatabaseError("simulated")
+
+    monkeypatch.setattr(Preference, "read_prefs", staticmethod(raise_db_error))
+    monkeypatch.setattr("siteprefs.toolbox.__MODELS_REGISTRY", {})
+
+    __package__ = "tests.testapp"
+
+    autodiscover_siteprefs()
+
+    assert "testapp" in get_prefs_models()
